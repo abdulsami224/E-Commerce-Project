@@ -1,8 +1,8 @@
-const Order = require('../models/Order');
-const Cart = require('../models/Cart');
+import Order from '../models/Order.js';
+import Cart from '../models/Cart.js';
 
 // Place order
-exports.placeOrder = async (req, res) => {
+export async function placeOrder(req, res) {
   const { shippingAddress } = req.body;
   try {
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
@@ -33,10 +33,10 @@ exports.placeOrder = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+}
 
 // Get my orders
-exports.getMyOrders = async (req, res) => {
+export async function getMyOrders(req, res) {
   try {
     const orders = await Order.find({ user: req.user._id })
       .populate('items.product')
@@ -45,10 +45,10 @@ exports.getMyOrders = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+}
 
 // Admin - get all orders
-exports.getAllOrders = async (req, res) => {
+export async function getAllOrders(req, res) {
   try {
     const orders = await Order.find()
       .populate('user', 'name email')
@@ -58,10 +58,10 @@ exports.getAllOrders = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+}
 
 // Admin - update order status
-exports.updateOrderStatus = async (req, res) => {
+export async function updateOrderStatus(req, res) {
   try {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
@@ -72,4 +72,4 @@ exports.updateOrderStatus = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+}

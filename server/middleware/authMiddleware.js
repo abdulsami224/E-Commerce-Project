@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
 // Protect route - any logged in user
-exports.protect = async (req, res, next) => {
+export async function protect(req, res, next) {
   let token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'Not authorized' });
 
@@ -13,12 +13,12 @@ exports.protect = async (req, res, next) => {
   } catch {
     res.status(401).json({ message: 'Token invalid' });
   }
-};
+}
 
 // Admin only
-exports.adminOnly = (req, res, next) => {
+export function adminOnly(req, res, next) {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ message: 'Admin access only' });
   }
   next();
-};
+}

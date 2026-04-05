@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import { useCart } from '../context/CartContext';  // ← add this
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const { addToCart } = useCart();  // ← add this
 
   useEffect(() => {
     const fetch = async () => {
@@ -14,6 +17,11 @@ const ProductDetail = () => {
     fetch();
   }, [id]);
 
+  const handleAddToCart = async () => {
+    await addToCart(product._id, 1);  // ← add this
+    navigate('/cart');                 // ← goes to cart after adding
+  };
+
   if (!product) return <p>Loading...</p>;
 
   return (
@@ -21,13 +29,16 @@ const ProductDetail = () => {
       <img src={product.image} alt={product.title} />
       <div className="info">
         <h2>{product.title}</h2>
-        <p className="category">{product.category}</p>
-        <p className="description">{product.description}</p>
-        <p className="price">Rs. {product.price}</p>
-        <p className="stock">
-          {product.stock > 0 ? `In Stock (${product.stock})` : 'Out of Stock'}
-        </p>
-        <button disabled={product.stock === 0}>Add to Cart</button>
+        <p>{product.category}</p>
+        <p>{product.description}</p>
+        <p>Rs. {product.price}</p>
+        <p>{product.stock > 0 ? `In Stock (${product.stock})` : 'Out of Stock'}</p>
+        <button
+          onClick={handleAddToCart}       // ← connected now
+          disabled={product.stock === 0}
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );

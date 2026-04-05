@@ -9,22 +9,21 @@ import MyOrders from './pages/MyOrders';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-
-            {/* Admin only example */}
-            <Route path="/admin" element={
-              <ProtectedRoute adminOnly>
-                <h1>Admin Dashboard</h1>
-              </ProtectedRoute>
-            } />
 
             <Route path="/" element={
               <ProtectedRoute>
@@ -53,6 +52,24 @@ function App() {
             <Route path="/my-orders" element={
               <ProtectedRoute>
                 <MyOrders />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin" element={
+              <ProtectedRoute adminOnly>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin/products" element={
+              <ProtectedRoute adminOnly>
+                <AdminProducts />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/admin/orders" element={
+              <ProtectedRoute adminOnly>
+                <AdminOrders />
               </ProtectedRoute>
             } />
 

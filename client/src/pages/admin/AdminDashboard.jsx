@@ -2,75 +2,54 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../../api/axios';
 
+const StatCard = ({ label, value, color }) => (
+  <div className={`bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 p-6 text-center`}>
+    <p className="text-sm text-gray-400 mb-1">{label}</p>
+    <p className={`text-3xl font-bold ${color}`}>{value}</p>
+  </div>
+);
+
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({
-    totalProducts: 0,
-    totalOrders: 0,
-    totalRevenue: 0,
-    pendingOrders: 0
-  });
+  const [stats, setStats] = useState({ products: 0, orders: 0, revenue: 0, pending: 0 });
 
   useEffect(() => {
-    const fetchStats = async () => {
-      const [productsRes, ordersRes] = await Promise.all([
-        API.get('/products'),
-        API.get('/orders/all')
-      ]);
-
-      const orders = ordersRes.data;
-      const revenue = orders.reduce((acc, o) => acc + o.totalPrice, 0);
-      const pending = orders.filter(o => o.status === 'pending').length;
-
+    const load = async () => {
+      const [p, o] = await Promise.all([API.get('/products'), API.get('/orders/all')]);
       setStats({
-        totalProducts: productsRes.data.length,
-        totalOrders: orders.length,
-        totalRevenue: revenue,
-        pendingOrders: pending
+        products: p.data.length,
+        orders: o.data.length,
+        revenue: o.data.reduce((a, b) => a + b.totalPrice, 0),
+        pending: o.data.filter(x => x.status === 'pending').length
       });
     };
-    fetchStats();
+    load();
   }, []);
 
   return (
-    <div style={styles.container}>
-      <h2>Admin Dashboard</h2>
-
-      {/* Stats Cards */}
-      <div style={styles.grid}>
-        <div style={styles.card}>
-          <h3>Total Products</h3>
-          <p style={styles.number}>{stats.totalProducts}</p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-10">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="font-heading text-3xl font-bold text-gray-800 dark:text-white mb-8">Admin Dashboard</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <StatCard label="Total Products" value={stats.products} color="text-blue-500" />
+          <StatCard label="Total Orders" value={stats.orders} color="text-purple-500" />
+          <StatCard label="Revenue" value={`Rs. ${stats.revenue}`} color="text-green-500" />
+          <StatCard label="Pending Orders" value={stats.pending} color="text-orange-500" />
         </div>
-        <div style={styles.card}>
-          <h3>Total Orders</h3>
-          <p style={styles.number}>{stats.totalOrders}</p>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link to="/admin/products" className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow p-6 hover:border-red-300 transition text-center">
+            <p className="text-3xl mb-2">📦</p>
+            <p className="font-semibold text-gray-700 dark:text-white">Manage Products</p>
+            <p className="text-xs text-gray-400 mt-1">Add, edit, delete products</p>
+          </Link>
+          <Link to="/admin/orders" className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow p-6 hover:border-red-300 transition text-center">
+            <p className="text-3xl mb-2">🧾</p>
+            <p className="font-semibold text-gray-700 dark:text-white">Manage Orders</p>
+            <p className="text-xs text-gray-400 mt-1">View and update order status</p>
+          </Link>
         </div>
-        <div style={styles.card}>
-          <h3>Total Revenue</h3>
-          <p style={styles.number}>Rs. {stats.totalRevenue}</p>
-        </div>
-        <div style={{ ...styles.card, borderColor: 'orange' }}>
-          <h3>Pending Orders</h3>
-          <p style={{ ...styles.number, color: 'orange' }}>{stats.pendingOrders}</p>
-        </div>
-      </div>
-
-      {/* Quick Links */}
-      <div style={styles.links}>
-        <Link to="/admin/products" style={styles.linkBtn}>Manage Products</Link>
-        <Link to="/admin/orders" style={styles.linkBtn}>Manage Orders</Link>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: { padding: '24px' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', margin: '24px 0' },
-  card: { background: '#f9f9f9', border: '2px solid #ddd', borderRadius: '8px', padding: '20px', textAlign: 'center' },
-  number: { fontSize: '32px', fontWeight: 'bold', color: '#333' },
-  links: { display: 'flex', gap: '16px' },
-  linkBtn: { background: '#222', color: '#fff', padding: '10px 20px', borderRadius: '6px', textDecoration: 'none' }
 };
 
 export default AdminDashboard;

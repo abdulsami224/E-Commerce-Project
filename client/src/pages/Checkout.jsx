@@ -1,13 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
-  const { cartTotal, clearCart, cart } = useCart();
+  const { clearCart } = useCart();
   const navigate = useNavigate();
-  const [address, setAddress] = useState({ street: '', city: '', phone: '' });
+  const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState({ street: '', city: '', phone: '' });
+
+  // Fetch fresh populated cart data
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const { data } = await API.get('/cart');
+        setCartItems(data.items || []);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCart();
+  }, []);
+
+  // Calculate total from fresh data
+  const cartTotal = cartItems.reduce((acc, item) => {
+    const price = item.product?.price || 0;
+    return acc + price * item.quantity;
+  }, 0);
 
   const handleChange = (e) => setAddress({ ...address, [e.target.name]: e.target.value });
 
@@ -34,6 +54,7 @@ const Checkout = () => {
         <h2 className="font-heading text-3xl font-bold text-gray-800 dark:text-white mb-8">Checkout</h2>
 
         <div className="grid md:grid-cols-2 gap-6">
+
           {/* Shipping Form */}
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow p-6 border border-gray-100 dark:border-gray-800">
             <h3 className="font-semibold text-gray-700 dark:text-white mb-4 text-lg">Shipping Address</h3>
@@ -53,25 +74,37 @@ const Checkout = () => {
           {/* Order Summary */}
           <div className="bg-white dark:bg-gray-900 rounded-2xl shadow p-6 border border-gray-100 dark:border-gray-800">
             <h3 className="font-semibold text-gray-700 dark:text-white mb-4 text-lg">Order Summary</h3>
+
             <div className="flex flex-col gap-2 mb-4">
-              {cart.map((item) => (
-                <div key={item.product._id} className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
-                  <span>{item.product.title} × {item.quantity}</span>
-                  <span>Rs. {item.product.price * item.quantity}</span>
-                </div>
-              ))}
+              {cartItems.map((item, index) => {
+                const product = item.product;
+                if (!product || typeof product !== 'object') return null;
+                return (
+                  <div
+                    key={item._id || index}  // ← item._id not product._id
+                    className="flex justify-between text-sm text-gray-500 dark:text-gray-400"
+                  >
+                    <span>{product.title} × {item.quantity}</span>
+                    <span>Rs. {product.price * item.quantity}</span>
+                  </div>
+                );
+              })}
             </div>
+
             <div className="border-t border-gray-100 dark:border-gray-700 pt-3 flex justify-between font-bold text-gray-800 dark:text-white">
               <span>Total</span>
               <span className="text-red-500 text-xl">Rs. {cartTotal}</span>
             </div>
+
             <button
-              onClick={handleOrder} disabled={loading}
+              onClick={handleOrder}
+              disabled={loading || cartItems.length === 0}
               className="w-full mt-6 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50"
             >
               {loading ? 'Placing Order...' : '✓ Place Order'}
             </button>
           </div>
+
         </div>
       </div>
     </div>

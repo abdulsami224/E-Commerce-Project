@@ -1,5 +1,6 @@
 import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
+import Product from '../models/Product.js';
 
 // Place order
 export async function placeOrder(req, res) {
@@ -9,7 +10,14 @@ export async function placeOrder(req, res) {
     if (!cart || cart.items.length === 0)
       return res.status(400).json({ message: 'Cart is empty' });
 
-    // Build order items
+    for (const item of cart.items) {
+      if (item.product.stock < item.quantity) {
+        return res.status(400).json({
+          message: `Not enough stock for "${item.product.title}". Only ${item.product.stock} left.`
+        });
+      }
+    }
+
     const items = cart.items.map((item) => ({
       product: item.product._id,
       quantity: item.quantity,
@@ -19,6 +27,7 @@ export async function placeOrder(req, res) {
     // Calculate total
     const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+    // Create order
     const order = await Order.create({
       user: req.user._id,
       items,
@@ -26,14 +35,20 @@ export async function placeOrder(req, res) {
       shippingAddress
     });
 
-    // Clear cart after order
+    // Decrease stock for each product ← new
+    for (const item of cart.items) {
+      await Product.findByIdAndUpdate(item.product._id, {
+        $inc: { stock: -item.quantity }  
+      });
+    }
+    
     await Cart.findOneAndDelete({ user: req.user._id });
 
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 // Get my orders
 export async function getMyOrders(req, res) {

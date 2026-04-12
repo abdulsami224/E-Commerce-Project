@@ -40,15 +40,25 @@ const Home = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition"
           />
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition"
-          >
-            {categories.map((c) => (
-              <option key={c} value={c}>{c === '' ? 'All Categories' : c.charAt(0).toUpperCase() + c.slice(1)}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition cursor-pointer"
+            >
+              {categories.map((c) => (
+                <option key={c} value={c}>
+                  {c === '' ? 'All Categories' : c.charAt(0).toUpperCase() + c.slice(1)}
+                </option>
+              ))}
+            </select>
+
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400 dark:text-gray-500">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
 
         {/* Products Grid */}

@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
-/* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+@variant dark (&:where(.dark, .dark *));
+
+/* @theme {
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --color-primary-light: #e63946;
+  --color-primary-dark: #ff6b6b;
+}
 
 * {
   margin: 0;

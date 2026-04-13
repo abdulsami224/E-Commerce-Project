@@ -56,3 +56,17 @@ export async function deleteProduct(req, res) {
     res.status(500).json({ message: err.message });
   }
 }
+
+// Get all unique categories
+export async function getCategories(req, res) {
+  try {
+    const categories = await Product.distinct('category');
+
+    const filtered = categories
+      .filter(c => c && c.trim() !== '')
+      .sort();
+    res.json(filtered);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

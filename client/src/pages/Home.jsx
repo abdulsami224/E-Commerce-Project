@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
-
-const categories = ['', 'electronics', 'footwear', 'clothing'];
+import useCategories from '../hooks/useCategories';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(true);
+  const { categories } = useCategories();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -46,14 +46,14 @@ const Home = () => {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition cursor-pointer"
             >
+              <option value="">All Categories</option>
               {categories.map((c) => (
                 <option key={c} value={c}>
-                  {c === '' ? 'All Categories' : c.charAt(0).toUpperCase() + c.slice(1)}
+                  {c.charAt(0).toUpperCase() + c.slice(1)}
                 </option>
               ))}
             </select>
-
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400 dark:text-gray-500">
+            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>

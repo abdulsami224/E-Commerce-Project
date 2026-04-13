@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { Plus, Pencil, Trash2, X, ChevronLeft, Package } from 'lucide-react';
 import API from '../../api/axios';
 
+import CategorySelect from '../../components/CategorySelect';
+import useCategories from '../../hooks/useCategories';
+
 const emptyForm = { title: '', description: '', price: '', category: '', stock: '', image: '' };
 
 const AdminProducts = () => {
@@ -11,6 +14,7 @@ const AdminProducts = () => {
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { categories, fetchCategories } = useCategories();
 
   const fetchProducts = async () => {
     const { data } = await API.get('/products');
@@ -33,6 +37,7 @@ const AdminProducts = () => {
       setEditId(null);
       setShowForm(false);
       fetchProducts();
+      fetchCategories(); // ← refresh categories after new product added
     } catch (err) {
       alert(err.response?.data?.message || 'Error saving product');
     }

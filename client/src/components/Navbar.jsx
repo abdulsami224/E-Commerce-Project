@@ -99,9 +99,9 @@ const Navbar = () => {
         <div className="md:hidden bg-white dark:bg-gray-900 px-4 pb-4 flex flex-col gap-3 text-sm font-medium border-t border-gray-100 dark:border-gray-700">
           {user ? (
             <>
-              <Link to="/" onClick={() => setMenuOpen(false)} className="py-2 hover:text-red-500">Home</Link>
-              <Link to="/cart" onClick={() => setMenuOpen(false)} className="py-2 hover:text-red-500">Cart ({cartCount})</Link>
-              <Link to="/my-orders" onClick={() => setMenuOpen(false)} className="py-2 hover:text-red-500">My Orders</Link>
+              <Link to="/" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">Home</Link>
+              <Link to="/cart" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">Cart ({cartCount})</Link>
+              <Link to="/my-orders" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">My Orders</Link>
               {user.role === 'admin' && (
                 <Link to="/admin" onClick={() => setMenuOpen(false)} className="py-2 text-red-500 font-semibold">Admin Panel</Link>
               )}

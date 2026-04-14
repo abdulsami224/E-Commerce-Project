@@ -112,7 +112,6 @@ const AdminProducts = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { name: 'title', placeholder: 'Product Title', type: 'text' },
-                { name: 'category', placeholder: 'Category', type: 'text' },
                 { name: 'price', placeholder: 'Price (Rs.)', type: 'number' },
                 { name: 'stock', placeholder: 'Stock Quantity', type: 'number' },
               ].map((field) => (
@@ -126,6 +125,17 @@ const AdminProducts = () => {
                   className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm"
                 />
               ))}
+
+              <div className="sm:col-span-2">
+                <label className="text-xs text-gray-500 dark:text-gray-400 mb-1.5 block font-medium">
+                  Category
+                </label>
+                <CategorySelect
+                  value={form.category}
+                  onChange={(val) => setForm({ ...form, category: val })}
+                  categories={categories}
+                />
+              </div>
               <input
                 name="image"
                 placeholder="Image URL"

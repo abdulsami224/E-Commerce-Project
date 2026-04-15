@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import ImageSlider from '../components/ImageSlider';
 import { useCart } from '../context/CartContext';
 import { ChevronLeft } from 'lucide-react';
 
@@ -42,7 +43,7 @@ const ProductDetail = () => {
         </button>
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
           <div className="md:w-1/2 h-72 md:h-auto">
-            <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+            <ImageSlider images={product.images || []} />
           </div>
           <div className="md:w-1/2 p-8 flex flex-col justify-center gap-4">
             <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-3 py-1 rounded-full w-fit font-medium">

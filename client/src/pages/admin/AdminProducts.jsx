@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Pencil, Trash2, X, ChevronLeft, Package } from 'lucide-react';
 import API from '../../api/axios';
-
+import ImageUploader from '../../components/ImageUploader';
 import CategorySelect from '../../components/CategorySelect';
 import useCategories from '../../hooks/useCategories';
 
-const emptyForm = { title: '', description: '', price: '', category: '', stock: '', image: '' };
+const emptyForm = { title: '', description: '', price: '', category: '', stock: '', images: [] };
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -14,6 +14,7 @@ const AdminProducts = () => {
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState([]);
   const { categories, fetchCategories } = useCategories();
 
   const fetchProducts = async () => {
@@ -27,17 +28,23 @@ const AdminProducts = () => {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
+    if (images.length === 0) {
+      alert('Please upload at least one image');
+      return;
+    }
     try {
+      const productData = { ...form, images };
       if (editId) {
-        await API.put(`/products/${editId}`, form);
+        await API.put(`/products/${editId}`, productData);
       } else {
-        await API.post('/products', form);
+        await API.post('/products', productData);
       }
       setForm(emptyForm);
+      setImages([]);
       setEditId(null);
       setShowForm(false);
       fetchProducts();
-      fetchCategories(); // ← refresh categories after new product added
+      fetchCategories();
     } catch (err) {
       alert(err.response?.data?.message || 'Error saving product');
     }
@@ -50,12 +57,13 @@ const AdminProducts = () => {
       price: product.price,
       category: product.category,
       stock: product.stock,
-      image: product.image
     });
+    setImages(product.images || []);
     setEditId(product._id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return;
@@ -66,6 +74,7 @@ const AdminProducts = () => {
   const handleCancel = () => {
     setShowForm(false);
     setForm(emptyForm);
+    setImages([]);
     setEditId(null);
   };
 
@@ -136,13 +145,7 @@ const AdminProducts = () => {
                   categories={categories}
                 />
               </div>
-              <input
-                name="image"
-                placeholder="Image URL"
-                value={form.image}
-                onChange={handleChange}
-                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm sm:col-span-2"
-              />
+              <ImageUploader images={images} setImages={setImages} />
               <textarea
                 name="description"
                 placeholder="Product Description"
@@ -153,13 +156,7 @@ const AdminProducts = () => {
               />
             </div>
 
-            {/* Preview */}
-            {form.image && (
-              <div className="mt-4 flex items-center gap-3">
-                <img src={form.image} alt="preview" className="w-14 h-14 rounded-xl object-cover border border-gray-200 dark:border-gray-700" />
-                <span className="text-xs text-gray-400">Image preview</span>
-              </div>
-            )}
+         
 
             <div className="flex gap-3 mt-5">
               <button

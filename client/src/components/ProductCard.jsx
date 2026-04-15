@@ -9,11 +9,11 @@ const ProductCard = ({ product }) => {
       className="bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden border border-gray-100 dark:border-gray-800"
     >
       <div className="overflow-hidden h-52">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+       <img
+        src={product.images?.[0] || 'https://placehold.co/300x300?text=No+Image'}
+        alt={product.title}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
       </div>
       <div className="p-4">
         <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-2 py-0.5 rounded-full font-medium">

@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => {
     >
       <div className="overflow-hidden h-52">
        <img
-        src={product.images?.[0] || 'https://placehold.co/300x300?text=No+Image'}
+        src={product.images?.[0]?.url || 'https://placehold.co/300x300?text=No+Image'}
         alt={product.title}
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       />

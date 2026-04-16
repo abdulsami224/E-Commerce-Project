@@ -11,7 +11,7 @@ const ImageSlider = ({ images }) => {
   );
 
   if (images.length === 1) return (
-    <img src={images[0]} alt="product" className="w-full h-72 md:h-full object-cover" />
+    <img src={images[0].url} alt="product" className="w-full h-72 md:h-full object-cover" />
   );
 
   const prev = () => setCurrent(i => (i === 0 ? images.length - 1 : i - 1));
@@ -25,10 +25,10 @@ const ImageSlider = ({ images }) => {
         className="flex h-full transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
-        {images.map((url, i) => (
+        {images.map((img, i) => (
           <img
             key={i}
-            src={url}
+            src={img.url}   
             alt={`product-${i + 1}`}
             className="w-full h-full object-cover flex-shrink-0"
             style={{ minWidth: '100%' }}

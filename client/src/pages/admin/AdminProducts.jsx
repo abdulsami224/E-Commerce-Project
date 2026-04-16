@@ -58,7 +58,7 @@ const AdminProducts = () => {
       category: product.category,
       stock: product.stock,
     });
-    setImages(product.images || []);
+    setImages(product.images || []);  
     setEditId(product._id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });

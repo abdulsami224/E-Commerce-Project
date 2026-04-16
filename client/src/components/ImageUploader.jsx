@@ -15,23 +15,17 @@ const ImageUploader = ({ images, setImages }) => {
 
     try {
       const formData = new FormData();
-
-      // ← make sure each file is appended correctly
       for (let i = 0; i < selected.length; i++) {
         formData.append('images', selected[i], selected[i].name);
       }
-
-      // log what we're sending
-      console.log('Uploading', selected.length, 'files');
 
       const { data } = await API.post('/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      console.log('Response URLs:', data.urls);
+      const received = data.images || data.urls || [];
+      setImages(prev => [...prev, ...received]);
 
-      const validUrls = data.urls.filter(u => typeof u === 'string' && u.startsWith('http'));
-      setImages(prev => [...prev, ...validUrls]);
     } catch (err) {
       console.log('Upload error:', err);
       alert('Upload failed: ' + (err.response?.data?.message || err.message));
@@ -42,7 +36,7 @@ const ImageUploader = ({ images, setImages }) => {
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) uploadFiles(e.target.files);
-    e.target.value = ''; // reset so same file can be re-selected
+    e.target.value = '';
   };
 
   const handleDrop = (e) => {
@@ -51,7 +45,14 @@ const ImageUploader = ({ images, setImages }) => {
     if (e.dataTransfer.files.length > 0) uploadFiles(e.dataTransfer.files);
   };
 
-  const handleRemove = (index) => {
+  const handleRemove = async (index) => {
+    const img = images[index];
+    try {
+      // delete from cloudinary
+      await API.delete('/upload', { data: { publicId: img.publicId } });
+    } catch (err) {
+      console.log('Could not delete from cloudinary:', err.message);
+    }
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
@@ -68,17 +69,13 @@ const ImageUploader = ({ images, setImages }) => {
       <div className="flex items-center gap-3 flex-wrap">
 
         {/* Tiny preview boxes */}
-        {images.map((url, index) => (
-          <div
-            key={index}
-            className="relative group w-16 h-16 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 flex-shrink-0"
-          >
+        {images.map((img, index) => (
+          <div key={index} className="relative group w-16 h-16 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 flex-shrink-0">
             <img
-              src={url}
+              src={img.url}  
               alt={`img-${index + 1}`}
               className="w-full h-full object-cover"
             />
-            {/* Remove button */}
             <button
               type="button"
               onClick={() => handleRemove(index)}
@@ -86,7 +83,6 @@ const ImageUploader = ({ images, setImages }) => {
             >
               <X size={14} className="text-white" />
             </button>
-            {/* Main badge */}
             {index === 0 && (
               <span className="absolute top-0.5 left-0.5 bg-red-500 text-white text-[9px] px-1 rounded font-medium leading-4">
                 Main

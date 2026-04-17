@@ -76,11 +76,11 @@ const Cart = () => {
                 key={item._id || index}  // ← use item._id, fallback to index
                 className="bg-white dark:bg-gray-900 rounded-2xl shadow p-4 flex flex-col sm:flex-row items-center gap-4 border border-gray-100 dark:border-gray-800"
               >
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="w-20 h-20 object-cover rounded-xl"
-                />
+              <img
+                src={product.images?.[0]?.url || 'https://placehold.co/80x80?text=No+Image'}
+                alt={product.title}
+                className="w-14 h-14 rounded-xl object-cover"
+              />
                 <div className="flex-1 text-center sm:text-left">
                   <h4 className="font-semibold text-gray-800 dark:text-white">{product.title}</h4>
                   <p className="text-red-500 font-bold">Rs. {product.price}</p>

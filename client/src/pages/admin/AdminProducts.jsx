@@ -206,7 +206,11 @@ const AdminProducts = () => {
                     <tr key={p._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <img src={p.image} alt={p.title} className="w-10 h-10 rounded-lg object-cover border border-gray-100 dark:border-gray-700" />
+                          <img
+                            src={p.images?.[0]?.url || 'https://placehold.co/80x80?text=No+Image'}
+                            alt={p.title}
+                            className="w-10 h-10 rounded-lg object-cover border border-gray-100 dark:border-gray-700"
+                          />
                           <span className="font-medium text-gray-800 dark:text-white line-clamp-1">{p.title}</span>
                         </div>
                       </td>

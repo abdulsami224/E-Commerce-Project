@@ -209,6 +209,7 @@ const AdminProducts = () => {
                           <img
                             src={p.images?.[0]?.url || 'https://placehold.co/80x80?text=No+Image'}
                             alt={p.title}
+                            loading="lazy"
                             className="w-10 h-10 rounded-lg object-cover border border-gray-100 dark:border-gray-700"
                           />
                           <span className="font-medium text-gray-800 dark:text-white line-clamp-1">{p.title}</span>
@@ -253,7 +254,12 @@ const AdminProducts = () => {
             <div className="md:hidden flex flex-col gap-3">
               {products.map((p) => (
                 <div key={p._id} className="bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-3">
-                  <img src={p.image} alt={p.title} className="w-14 h-14 rounded-xl object-cover" />
+                  <img
+                    src={p.images?.[0]?.url || 'https://placehold.co/80x80?text=No+Image'}
+                    alt={p.title}
+                    loading="lazy"
+                    className="w-14 h-14 rounded-xl object-cover"
+                  />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-800 dark:text-white text-sm line-clamp-1">{p.title}</p>
                     <p className="text-red-500 font-bold text-sm">Rs. {p.price}</p>

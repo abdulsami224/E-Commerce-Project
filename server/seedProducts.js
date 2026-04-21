@@ -1,81 +1,78 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import csv from "csvtojson";
-import fs from "fs";
-import path from "path";
-import Product from "./models/Product.js";
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+import csv from 'csvtojson';
+import Product from './models/Product.js';
 
 dotenv.config();
 
 const importData = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB Connected");
+    console.log('MongoDB Connected');
 
-    const folderPath = "./data";
+    const folderPath = './data';
     const files = fs.readdirSync(folderPath);
 
     let allProducts = [];
 
-    // loop through all CSV files
     for (const file of files) {
-      if (file.endsWith(".csv")) {
-        const filePath = path.join(folderPath, file);
+      if (!file.endsWith('.csv')) continue;
 
-        console.log("Reading:", file);
+      const filePath = path.join(folderPath, file);
+      console.log('Reading:', file);
 
-        const products = await csv().fromFile(filePath);
+      const products = await csv().fromFile(filePath);
 
-        const formatted = products.map(item => {
-            const priceValue = parseFloat(
-                item.final_price?.replace(/[^0-9.]/g, "")
-            );
+      const formatted = products
+        .map(item => {
+          // Bug 1 — price was NaN for many items, added fallback
+          const priceValue = parseFloat(
+            item.final_price?.toString().replace(/[^0-9.]/g, '') || '0'
+          );
 
+          // Bug 2 — images parsing was silently failing, added better fallback
+          let images = [];
+          if (item.images) {
+            try {
+              const parsed = JSON.parse(item.images);
+              images = Array.isArray(parsed)
+                ? parsed.map(url => ({ url: url.trim(), publicId: 'seeded' }))
+                : [{ url: item.images.trim(), publicId: 'seeded' }];
+            } catch {
+              images = [{ url: item.images.trim(), publicId: 'seeded' }];
+            }
+          }
 
-            return {
-                title: item.title,
+          // Bug 3 — skip products with no title
+          if (!item.title || item.title.trim() === '') return null;
 
-                description: item.product_description || "",
+          return {
+            title: item.title.trim(),
+            description: item.product_description?.trim() || '',
+            price: isNaN(priceValue) ? 0 : priceValue,
+            category: item.category?.trim().toLowerCase() || 'general',
+            stock: 10,
+            images,
+          };
+        })
+        .filter(Boolean); // remove null entries (products with no title)
 
-                price: isNaN(priceValue) ? 0 : priceValue,
-
-                category: item.category || "General",
-
-                stock: 10,
-
-                images: item.images
-                ? (() => {
-                    try {
-                        return JSON.parse(item.images).map(url => ({
-                        url,
-                        publicId: "dummy"
-                        }));
-                    } catch {
-                        return [{
-                        url: item.images,
-                        publicId: "dummy"
-                        }];
-                    }
-                    })()
-                : []
-            };
-            });
-
-        allProducts.push(...formatted);
-      }
+      console.log(`  → ${formatted.length} valid products from ${file}`);
+      allProducts.push(...formatted);
     }
 
-    // optional: clear old data
+    // Clear then insert
     await Product.deleteMany();
+    console.log('Existing products cleared');
 
-    // insert all products
     await Product.insertMany(allProducts);
+    console.log(`✅ Imported ${allProducts.length} products successfully`);
 
-    console.log(`Imported ${allProducts.length} products ✅`);
-    process.exit();
-
+    process.exit(0);
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Seed error:', error.message);
     process.exit(1);
   }
 };

@@ -9,9 +9,11 @@ const ProductCard = ({ product }) => {
       className="bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden border border-gray-100 dark:border-gray-800"
     >
       <div className="overflow-hidden h-52">
-       <img
+      <img
         src={product.images?.[0]?.url || 'https://placehold.co/300x300?text=No+Image'}
         alt={product.title}
+        loading="lazy"
+        decoding="async"   // ← decode off main thread
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
       />
       </div>

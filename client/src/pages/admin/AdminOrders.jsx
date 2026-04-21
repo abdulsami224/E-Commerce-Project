@@ -138,7 +138,12 @@ const AdminOrders = () => {
                     <div key={item.product?._id} className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
                         {item.product?.image && (
-                          <img src={item.product.image} alt="" className="w-8 h-8 rounded-lg object-cover" />
+                          <img
+                            src={item.product?.images?.[0]?.url}
+                            alt=""
+                            loading="lazy"
+                            className="w-8 h-8 rounded-lg object-cover"
+                          />
                         )}
                         <span className="text-gray-600 dark:text-gray-400">
                           {item.product?.title}

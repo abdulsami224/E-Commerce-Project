@@ -14,6 +14,7 @@ import Navbar from './components/Navbar';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
+import ToastProvider from "./components/ToastProvider";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <CartProvider>
           <BrowserRouter>
             <Navbar />
+            <ToastProvider />
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

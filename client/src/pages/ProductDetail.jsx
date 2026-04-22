@@ -4,6 +4,7 @@ import API from '../api/axios';
 import ImageSlider from '../components/ImageSlider';
 import { useCart } from '../context/CartContext';
 import { ChevronLeft } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -21,8 +22,13 @@ const ProductDetail = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    await addToCart(product._id, qty);
-    navigate('/cart');
+    try {
+      await addToCart(product._id, qty);
+      toast.success(`${product.title.slice(0, 20)}... added to cart`);
+      navigate('/cart');
+    } catch (err) {
+      toast.error('Failed to add to cart');
+    }
   };
 
   if (!product) return (

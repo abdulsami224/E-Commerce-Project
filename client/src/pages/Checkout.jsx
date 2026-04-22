@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useCart } from '../context/CartContext';
+import toast from 'react-hot-toast';
 
 const Checkout = () => {
   const { clearCart } = useCart();
@@ -33,16 +34,17 @@ const Checkout = () => {
 
   const handleOrder = async () => {
     if (!address.street || !address.city || !address.phone) {
-      alert('Please fill all fields');
+      toast.error('Please fill all shipping fields');
       return;
     }
     setLoading(true);
     try {
       await API.post('/orders', { shippingAddress: address });
       clearCart();
+      toast.success('Order placed successfully! 🎉');
       navigate('/my-orders');
     } catch (err) {
-      alert(err.response?.data?.message || 'Order failed');
+      toast.error(err.response?.data?.message || 'Order failed');
     } finally {
       setLoading(false);
     }

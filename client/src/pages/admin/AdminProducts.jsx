@@ -4,7 +4,9 @@ import { Plus, Pencil, Trash2, X, ChevronLeft, Package } from 'lucide-react';
 import API from '../../api/axios';
 import ImageUploader from '../../components/ImageUploader';
 import CategorySelect from '../../components/CategorySelect';
+import Pagination from '../../components/Pagination';
 import useCategories from '../../hooks/useCategories';
+import toast from 'react-hot-toast';
 
 const emptyForm = { title: '', description: '', price: '', category: '', stock: '', images: [] };
 
@@ -15,39 +17,88 @@ const AdminProducts = () => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const LIMIT = 15; 
   const { categories, fetchCategories } = useCategories();
 
-  const fetchProducts = async () => {
-    const { data } = await API.get('/products');
-    setProducts(data);
-    setLoading(false);
+  const fetchProducts = async (page = 1) => {
+    try {
+      const { data } = await API.get('/products', {
+        params: { page, limit: LIMIT }
+      });
+      setProducts(data.products);
+      setCurrentPage(data.currentPage);
+      setTotalPages(data.totalPages);
+      setTotalProducts(data.totalProducts);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { fetchProducts(1); }, []);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
     if (images.length === 0) {
-      alert('Please upload at least one image');
+      toast.error('Please upload at least one image');
       return;
     }
     try {
       const productData = { ...form, images };
       if (editId) {
         await API.put(`/products/${editId}`, productData);
+        toast.success('Product updated successfully');
       } else {
         await API.post('/products', productData);
+        toast.success('Product added successfully');
       }
       setForm(emptyForm);
       setImages([]);
       setEditId(null);
       setShowForm(false);
-      fetchProducts();
+      fetchProducts(currentPage);
       fetchCategories();
     } catch (err) {
-      alert(err.response?.data?.message || 'Error saving product');
+      toast.error(err.response?.data?.message || 'Error saving product');
     }
+  };
+
+// In AdminProducts.jsx — replace handleDelete with this
+  const handleDelete = async (id) => {
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-medium text-sm">Delete this product?</p>
+        <p className="text-xs text-gray-400">This action cannot be undone.</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                await API.delete(`/products/${id}`);
+                toast.success('Product deleted');
+                fetchProducts(currentPage);
+              } catch (err) {
+                toast.error('Failed to delete product');
+              }
+            }}
+            className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 rounded-lg transition"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="flex-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-xs py-1.5 rounded-lg hover:border-red-400 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity }); // stays until user clicks
   };
 
   const handleEdit = (product) => {
@@ -62,13 +113,6 @@ const AdminProducts = () => {
     setEditId(product._id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this product?')) return;
-    await API.delete(`/products/${id}`);
-    fetchProducts();
   };
 
   const handleCancel = () => {
@@ -95,7 +139,6 @@ const AdminProducts = () => {
               <h2 className="font-heading text-2xl font-bold text-gray-800 dark:text-white">
                 Manage Products
               </h2>
-              <p className="text-xs text-gray-400 mt-0.5">{products.length} products total</p>
             </div>
           </div>
           <button
@@ -278,6 +321,23 @@ const AdminProducts = () => {
             </div>
           </>
         )}
+
+        <div className="flex items-center justify-between mt-6">
+          <p className="text-xs text-gray-400">
+            Showing{' '}
+            <span className="text-gray-600 dark:text-gray-300 font-medium">
+              {(currentPage - 1) * LIMIT + 1}–{Math.min(currentPage * LIMIT, totalProducts)}
+            </span>{' '}
+            of{' '}
+            <span className="text-gray-600 dark:text-gray-300 font-medium">{totalProducts}</span>{' '}
+            products
+          </p>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => fetchProducts(page)}
+          />
+        </div>
       </div>
     </div>
   );

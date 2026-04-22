@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const { login } = useAuth();
@@ -19,8 +20,10 @@ const Register = () => {
       const { data } = await API.post('/auth/register', form);
       login(data);
       navigate('/');
+      toast.success('Account created successfully!');
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
+      toast.error(err.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }

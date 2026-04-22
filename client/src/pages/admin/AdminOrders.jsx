@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ShoppingBag } from 'lucide-react';
 import API from '../../api/axios';
+import toast from 'react-hot-toast';
 
 const statusStyles = {
   pending:    'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400',
@@ -25,8 +26,13 @@ const AdminOrders = () => {
   useEffect(() => { fetchOrders(); }, []);
 
   const handleStatusChange = async (orderId, status) => {
-    await API.put(`/orders/${orderId}/status`, { status });
-    fetchOrders();
+    try {
+      await API.put(`/orders/${orderId}/status`, { status });
+      toast.success(`Order marked as ${status}`);
+      fetchOrders();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update order');
+    }
   };
 
   const filtered = filter ? orders.filter(o => o.status === filter) : orders;

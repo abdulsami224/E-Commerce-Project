@@ -4,21 +4,14 @@
 
 @variant dark (&:where(.dark, .dark *));
 
-/* @theme {
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'DM Sans', sans-serif;
-
-  --color-primary-light: #e63946;
-  --color-primary-dark: #ff6b6b;
+:root {
+  --toast-bg: #ffffff;
+  --toast-color: #1f2937;
+  --toast-border: #e5e7eb;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.dark {
+  --toast-bg: #111827;
+  --toast-color: #f9fafb;
+  --toast-border: #374151;
 }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.3s, color 0.3s;
-} */

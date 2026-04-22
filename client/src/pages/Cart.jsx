@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import toast from 'react-hot-toast';
 
 const Cart = () => {
   const { removeFromCart, updateQuantity } = useCart();
@@ -26,14 +27,23 @@ const Cart = () => {
   }, []);
 
   const handleRemove = async (productId) => {
-    await removeFromCart(productId);
-    fetchCart();
+    try {
+      await removeFromCart(productId);
+      toast.success('Item removed from cart');
+      fetchCart();
+    } catch (err) {
+      toast.error('Failed to remove item');
+    }
   };
 
   const handleUpdate = async (productId, qty) => {
     if (qty < 1) return;
-    await updateQuantity(productId, qty);
-    fetchCart(); 
+    try {
+      await updateQuantity(productId, qty);
+      fetchCart();
+    } catch (err) {
+      toast.error('Failed to update quantity');
+    }
   };
 
   const cartTotal = cartItems.reduce((acc, item) => {

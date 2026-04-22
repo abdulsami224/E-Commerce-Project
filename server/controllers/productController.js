@@ -3,12 +3,27 @@ import { deleteFromCloudinary } from '../routes/uploadRoutes.js';
 
 export const getProducts = async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, search, page = 1, limit = 20 } = req.query;
+
     let filter = {};
     if (category) filter.category = category;
     if (search) filter.title = { $regex: search, $options: 'i' };
-    const products = await Product.find(filter);
-    res.json(products);
+
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+
+    const [products, total] = await Promise.all([
+      Product.find(filter).skip(skip).limit(limitNum),
+      Product.countDocuments(filter)
+    ]);
+
+    res.json({
+      products,
+      currentPage: pageNum,
+      totalPages: Math.ceil(total / limitNum),
+      totalProducts: total,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

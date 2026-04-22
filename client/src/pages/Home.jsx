@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
+import Pagination from '../components/Pagination';
 import useCategories from '../hooks/useCategories';
 
 const Home = () => {
@@ -8,17 +9,42 @@ const Home = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
   const { categories } = useCategories();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
+  const fetchProducts = async (page = 1) => {
+    try {
       setLoading(true);
-      const { data } = await API.get('/products', { params: { search, category } });
-      setProducts(data);
+      // scroll to top on page change
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const { data } = await API.get('/products', {
+        params: { search, category, page, limit: 20 }
+      });
+
+      setProducts(data.products);
+      setCurrentPage(data.currentPage);
+      setTotalPages(data.totalPages);
+      setTotalProducts(data.totalProducts);
+    } catch (err) {
+      console.log(err);
+    } finally {
       setLoading(false);
-    };
-    fetchProducts();
+    }
+  };
+
+  // reset to page 1 when search or category changes
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchProducts(1);
   }, [search, category]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts(page);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-8">
@@ -29,11 +55,13 @@ const Home = () => {
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-3">
             Discover Our Collection
           </h1>
-          <p className="text-gray-400 text-sm md:text-base">Fresh styles. Great prices. Delivered to you.</p>
+          <p className="text-gray-400 text-sm md:text-base">
+            Fresh styles. Great prices. Delivered to you.
+          </p>
         </div>
 
         {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <input
             placeholder="Search products..."
             value={search}
@@ -64,7 +92,7 @@ const Home = () => {
         {/* Products Grid */}
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[...Array(8)].map((_, i) => (
+            {[...Array(20)].map((_, i) => (
               <div key={i} className="bg-gray-200 dark:bg-gray-800 rounded-2xl h-64 animate-pulse" />
             ))}
           </div>
@@ -77,6 +105,14 @@ const Home = () => {
             ))}
           </div>
         )}
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+
       </div>
     </div>
   );

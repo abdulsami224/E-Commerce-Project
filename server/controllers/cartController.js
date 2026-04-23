@@ -1,4 +1,5 @@
 import Cart from '../models/Cart.js';
+import Product from '../models/Product.js';
 
 // Get cart
 export async function getCart(req, res) {
@@ -12,28 +13,29 @@ export async function getCart(req, res) {
 }
 
 // Add item to cart
-export async function addToCart(req, res) {
+export const addToCart = async (req, res) => {
   const { productId, quantity } = req.body;
   try {
+    // ← add this stock check
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    if (product.stock === 0) return res.status(400).json({ message: 'Product is out of stock' });
+    if (product.stock < quantity) return res.status(400).json({ message: `Only ${product.stock} items available` });
+
     let cart = await Cart.findOne({ user: req.user._id });
 
     if (!cart) {
-      // Create new cart
       cart = await Cart.create({
         user: req.user._id,
         items: [{ product: productId, quantity }]
       });
     } else {
-      // Check if product already in cart
       const itemIndex = cart.items.findIndex(
         (item) => item.product.toString() === productId
       );
-
       if (itemIndex > -1) {
-        // Increase quantity
         cart.items[itemIndex].quantity += quantity;
       } else {
-        // Add new item
         cart.items.push({ product: productId, quantity });
       }
       await cart.save();
@@ -43,7 +45,7 @@ export async function addToCart(req, res) {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 // Update quantity
 export async function updateCartItem(req, res) {

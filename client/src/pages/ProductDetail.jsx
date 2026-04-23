@@ -14,20 +14,24 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchProduct = async () => {
       const { data } = await API.get(`/products/${id}`);
       setProduct(data);
     };
-    fetch();
-  }, [id]);
+    fetchProduct();
+  }, [id]); 
 
   const handleAddToCart = async () => {
+    if (product.stock === 0) {
+      toast.error('This product is out of stock');
+      return;
+    }
     try {
       await addToCart(product._id, qty);
       toast.success(`${product.title.slice(0, 20)}... added to cart`);
       navigate('/cart');
     } catch (err) {
-      toast.error('Failed to add to cart');
+      toast.error(err.response?.data?.message || 'Failed to add to cart');
     }
   };
 
@@ -75,9 +79,13 @@ const ProductDetail = () => {
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-40 disabled:cursor-not-allowed mt-2"
+              className={`w-full font-semibold py-3 rounded-xl transition mt-2 ${
+                product.stock === 0
+                  ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
+                  : 'bg-red-500 hover:bg-red-600 text-white'
+              }`}
             >
-              Add to Cart
+              {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
             </button>
           </div>
         </div>

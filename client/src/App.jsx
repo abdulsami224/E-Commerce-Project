@@ -6,6 +6,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import MyOrders from './pages/MyOrders';
+import OrderConfirmation from './pages/OrderConfirmation';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -74,6 +75,12 @@ function App() {
               <Route path="/admin/orders" element={
                 <ProtectedRoute adminOnly>
                   <AdminOrders />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/order-confirmation/:id" element={
+                <ProtectedRoute>
+                  <OrderConfirmation />
                 </ProtectedRoute>
               } />
 

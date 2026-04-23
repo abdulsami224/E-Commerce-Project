@@ -11,12 +11,20 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState({ street: '', city: '', phone: '' });
 
-  // Fetch fresh populated cart data
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const { data } = await API.get('/cart');
-        setCartItems(data.items || []);
+        const items = data.items || [];
+
+        // ← redirect to cart if empty
+        if (items.length === 0) {
+          toast.error('Your cart is empty');
+          navigate('/cart');
+          return;
+        }
+
+        setCartItems(items);
       } catch (err) {
         console.log(err);
       }
@@ -39,10 +47,10 @@ const Checkout = () => {
     }
     setLoading(true);
     try {
-      await API.post('/orders', { shippingAddress: address });
+      const { data } = await API.post('/orders', { shippingAddress: address });
       clearCart();
       toast.success('Order placed successfully! 🎉');
-      navigate('/my-orders');
+      navigate(`/order-confirmation/${data._id}`);  
     } catch (err) {
       toast.error(err.response?.data?.message || 'Order failed');
     } finally {

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Pencil, Trash2, X, ChevronLeft, Package } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, ChevronLeft, Package, Search } from 'lucide-react';
 import API from '../../api/axios';
 import ImageUploader from '../../components/ImageUploader';
 import CategorySelect from '../../components/CategorySelect';
@@ -20,13 +20,15 @@ const AdminProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  const LIMIT = 15; 
+  const [search, setSearch] = useState('');
+  const searchDebounceRef = useRef(null); 
+  const LIMIT = 15;
   const { categories, fetchCategories } = useCategories();
 
-  const fetchProducts = async (page = 1) => {
+  const fetchProducts = async (page = 1, searchVal = search) => {
     try {
       const { data } = await API.get('/products', {
-        params: { page, limit: LIMIT }
+        params: { page, limit: LIMIT, search: searchVal }
       });
       setProducts(data.products);
       setCurrentPage(data.currentPage);
@@ -41,6 +43,15 @@ const AdminProducts = () => {
 
   useEffect(() => { fetchProducts(1); }, []);
 
+  const handleSearch = (val) => {
+    setSearch(val);
+    clearTimeout(searchDebounceRef.current);
+    searchDebounceRef.current = setTimeout(() => {
+      setCurrentPage(1);
+      fetchProducts(1, val);
+    }, 400);
+  };
+  
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
@@ -127,27 +138,44 @@ const AdminProducts = () => {
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <Link
-              to="/admin"
-              className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-400 transition text-gray-500 dark:text-gray-400"
-            >
-              <ChevronLeft size={18} />
-            </Link>
-            <div>
-              <h2 className="font-heading text-2xl font-bold text-gray-800 dark:text-white">
-                Manage Products
-              </h2>
+        <div className="flex flex-col gap-4 mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Link
+                to="/admin"
+                className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-400 transition text-gray-500 dark:text-gray-400"
+              >
+                <ChevronLeft size={18} />
+              </Link>
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-gray-800 dark:text-white">
+                  Manage Products
+                </h2>
+                <p className="text-xs text-gray-400 mt-0.5">{totalProducts} products total</p>
+              </div>
             </div>
+            <button
+              onClick={() => { setShowForm(!showForm); setForm(emptyForm); setEditId(null); }}
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
+            >
+              {showForm ? <X size={16} /> : <Plus size={16} />}
+              {showForm ? 'Cancel' : 'Add Product'}
+            </button>
           </div>
-          <button
-            onClick={() => { setShowForm(!showForm); setForm(emptyForm); setEditId(null); }}
-            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
-          >
-            {showForm ? <X size={16} /> : <Plus size={16} />}
-            {showForm ? 'Cancel' : 'Add Product'}
-          </button>
+
+          {/* Search Bar */}
+          <div className="relative">
+            <Search
+              size={16}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              type="text"
+              placeholder="Search products by name..."
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm"
+            />
+          </div>
         </div>
 
         {/* Add / Edit Form */}

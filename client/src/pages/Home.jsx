@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
 import Pagination from '../components/Pagination';
@@ -13,6 +13,7 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const { categories } = useCategories();
+  const searchDebounceRef = useRef(null);
 
   const fetchProducts = async (page = 1) => {
     try {
@@ -65,7 +66,13 @@ const Home = () => {
           <input
             placeholder="Search products..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              clearTimeout(searchDebounceRef.current);
+              searchDebounceRef.current = setTimeout(() => {
+                setSearch(value);
+              }, 400); 
+            }}
             className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition"
           />
           <div className="relative">

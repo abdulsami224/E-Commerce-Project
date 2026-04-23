@@ -88,3 +88,19 @@ export async function updateOrderStatus(req, res) {
     res.status(500).json({ message: err.message });
   }
 }
+
+export const getOrderById = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate('items.product', 'title images');  // ← get title + images only
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // make sure user owns this order
+    if (order.user.toString() !== req.user._id.toString())
+      return res.status(403).json({ message: 'Not authorized' });
+
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

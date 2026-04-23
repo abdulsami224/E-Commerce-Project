@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronLeft, Sun, Moon } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -43,54 +43,79 @@ const Navbar = () => {
               {user.role === 'admin' && (
                 <Link to="/admin" className="text-red-500 font-semibold hover:underline">Admin</Link>
               )}
-              <span className="text-gray-400 dark:text-gray-500">Hi, {user.name.split(' ')[0]}</span>
+
+                <span className="text-gray-400 dark:text-gray-500">Hi, {user.name.split(' ')[0]}</span>
+    
+                <button
+                  onClick={() => setDark(!dark)}
+                  className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
+                    dark ? 'bg-red-500' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center ${
+                    dark ? 'translate-x-5' : 'translate-x-0'
+                  }`}>
+                    {dark
+                      ? <Moon size={10} className="text-gray-400" />
+                      : <Sun size={10} className="text-gray-400" />
+                    }
+                  </span>
+                </button>
               <button
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-sm transition"
               >
                 Logout
               </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="hover:text-red-500 transition">Login</Link>
-              <Link to="/register" className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full transition">
-                Register
-              </Link>
-            </>
+              </>
+            ) : (
+          <>
+            <button
+              onClick={() => setDark(!dark)}
+              className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
+                dark ? 'bg-red-500' : 'bg-gray-200 dark:bg-gray-700'
+              }`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center ${
+                dark ? 'translate-x-5' : 'translate-x-0'
+              }`}>
+                {dark
+                  ? <Moon size={10} className="text-gray-400" />
+                  : <Sun size={10} className="text-gray-400" />
+                }
+              </span>
+            </button>
+          </>
           )}
-
-          {/* Dark Mode Toggle */}
-        <button
-          onClick={() => setDark(!dark)}
-          className={`relative ml-2 w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
-            dark ? 'bg-red-500' : 'bg-gray-200 dark:bg-gray-700'
-          }`}
-        >
-          <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
-            dark ? 'translate-x-5' : 'translate-x-0'
-          }`} />
-        </button>
         </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-3">
-        <button
-          onClick={() => setDark(!dark)}
-          className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
-            dark ? 'bg-red-500' : 'bg-gray-200 dark:bg-gray-700'
-          }`}
-        >
-          <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
-            dark ? 'translate-x-5' : 'translate-x-0'
-          }`} />
-        </button>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="p-2 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-        >
-          {menuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          <button
+            onClick={() => setDark(!dark)}
+            className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
+              dark ? 'bg-red-500' : 'bg-gray-200 dark:bg-gray-700'
+            }`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center ${
+              dark ? 'translate-x-5' : 'translate-x-0'
+            }`}>
+              {dark
+                ? <Moon size={10} className="text-gray-400" />
+                : <Sun size={10} className="text-gray-400" />
+              }
+            </span>
+          </button>
+
+          {/* Menu toggle — only show when logged in */}
+          {user && (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          )}
         </div>
       </div>
 

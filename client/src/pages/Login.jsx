@@ -20,6 +20,7 @@ const Login = () => {
       const { data } = await API.post('/auth/login', form);
       login(data);
       navigate('/');
+      toast.success('Login successfull!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid credentials');
     } finally {

@@ -11,6 +11,8 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [address, setAddress] = useState({ street: '', city: '', phone: '' });
 
+  useEffect(() => { document.title = 'ShopApp | Checkout'; }, []);
+
   useEffect(() => {
     const fetchCart = async () => {
       try {

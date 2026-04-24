@@ -13,6 +13,8 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => { document.title = 'ShopApp | My Orders'; }, []);
+
   useEffect(() => {
     const fetch = async () => {
       const { data } = await API.get('/orders/my');

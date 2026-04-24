@@ -7,6 +7,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import MyOrders from './pages/MyOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
+import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -83,6 +84,8 @@ function App() {
                   <OrderConfirmation />
                 </ProtectedRoute>
               } />
+
+              <Route path="*" element={<NotFound />} />
 
             </Routes>
           </BrowserRouter>

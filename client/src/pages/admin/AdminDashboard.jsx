@@ -12,6 +12,8 @@ const StatCard = ({ label, value, color }) => (
 const AdminDashboard = () => {
   const [stats, setStats] = useState({ products: 0, orders: 0, revenue: 0, pending: 0 });
 
+  useEffect(() => { document.title = 'ShopApp | Admin Dashboard'; }, []);
+
   useEffect(() => {
     const load = async () => {
       const [p, o] = await Promise.all([API.get('/products'), API.get('/orders/all')]);

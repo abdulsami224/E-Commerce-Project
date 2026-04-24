@@ -15,6 +15,10 @@ const Home = () => {
   const { categories } = useCategories();
   const searchDebounceRef = useRef(null);
 
+  useEffect(() => {
+    document.title = 'ShopApp | Shop';
+  }, []);
+
   const fetchProducts = async (page = 1) => {
     try {
       setLoading(true);

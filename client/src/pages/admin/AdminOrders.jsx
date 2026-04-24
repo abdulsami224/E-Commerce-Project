@@ -17,6 +17,8 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
 
+  useEffect(() => { document.title = 'ShopApp | Manage Orders'; }, []);
+
   const fetchOrders = async () => {
     const { data } = await API.get('/orders/all');
     setOrders(data);

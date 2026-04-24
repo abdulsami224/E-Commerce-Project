@@ -25,6 +25,8 @@ const AdminProducts = () => {
   const LIMIT = 15;
   const { categories, fetchCategories } = useCategories();
 
+  useEffect(() => { document.title = 'ShopApp | Manage Products'; }, []);
+
   const fetchProducts = async (page = 1, searchVal = search) => {
     try {
       const { data } = await API.get('/products', {

@@ -14,6 +14,11 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
 
   useEffect(() => {
+    if (product) document.title = `ShopApp | ${product.title}`;
+    return () => { document.title = 'ShopApp'; }; // reset on leave
+  }, [product]);
+
+  useEffect(() => {
     const fetchProduct = async () => {
       const { data } = await API.get(`/products/${id}`);
       setProduct(data);
@@ -36,8 +41,50 @@ const ProductDetail = () => {
   };
 
   if (!product) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-      <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-10">
+      <div className="max-w-5xl mx-auto">
+
+        {/* Back button skeleton */}
+        <div className="w-16 h-4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse mb-6" />
+
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+
+          {/* Image skeleton */}
+          <div className="md:w-1/2 h-72 md:h-auto bg-gray-200 dark:bg-gray-800 animate-pulse" />
+
+          {/* Content skeleton */}
+          <div className="md:w-1/2 p-8 flex flex-col gap-4">
+
+            {/* Category badge */}
+            <div className="w-20 h-5 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse" />
+
+            {/* Title */}
+            <div className="flex flex-col gap-2">
+              <div className="w-full h-7 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
+              <div className="w-3/4 h-7 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
+            </div>
+
+            {/* Description */}
+            <div className="flex flex-col gap-2 mt-1">
+              <div className="w-full h-4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+              <div className="w-full h-4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+              <div className="w-2/3 h-4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+            </div>
+
+            {/* Price */}
+            <div className="w-28 h-9 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse mt-1" />
+
+            {/* Stock */}
+            <div className="w-36 h-4 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+
+            {/* Qty selector */}
+            <div className="w-32 h-10 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse" />
+
+            {/* Add to cart button */}
+            <div className="w-full h-12 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse mt-2" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 

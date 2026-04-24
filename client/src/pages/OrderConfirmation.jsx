@@ -18,6 +18,10 @@ const OrderConfirmation = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (order) document.title = `ShopApp | Order #${order._id.slice(-6)}`;
+  }, [order]);
+
+  useEffect(() => {
     const fetchOrder = async () => {
       try {
         const { data } = await API.get(`/orders/${id}`);

@@ -10,6 +10,12 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    document.title = cartItems.length > 0
+      ? `ShopApp | Cart (${cartItems.length})`
+      : 'ShopApp | Cart';
+  }, [cartItems]);
+
   const fetchCart = async () => {
     try {
       setLoading(true);

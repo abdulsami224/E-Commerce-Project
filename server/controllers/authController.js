@@ -50,3 +50,128 @@ export async function login(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
+
+// Get profile
+export const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Update profile
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, email, currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user._id);
+
+    // update name
+    if (name) user.name = name;
+
+    // update email — check not taken by another user
+    if (email && email !== user.email) {
+      const exists = await User.findOne({ email });
+      if (exists) return res.status(400).json({ message: 'Email already in use' });
+      user.email = email;
+    }
+
+    // update password
+    if (currentPassword && newPassword) {
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) return res.status(400).json({ message: 'Current password is incorrect' });
+      if (newPassword.length < 6) return res.status(400).json({ message: 'Password must be at least 6 characters' });
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    await user.save();
+
+    // return updated user without password
+    const updated = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token: generateToken(user._id)
+    };
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+import crypto from 'crypto';
+import { sendResetEmail } from '../config/email.js';
+
+// Forgot Password
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    // always return success even if email not found — security best practice
+    if (!user) {
+      return res.json({ message: 'If this email exists, a reset link has been sent' });
+    }
+
+    // generate token
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // save hashed token + expiry to DB
+    user.resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
+
+    await user.save();
+
+    // send email with plain token (not hashed)
+    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
+    await sendResetEmail(user.email, resetUrl);
+
+    res.json({ message: 'If this email exists, a reset link has been sent' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Reset Password
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    // hash token to compare with DB
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+
+    // find user with valid token that hasn't expired
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Reset link is invalid or has expired' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+
+    // update password
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.json({ message: 'Password reset successful. You can now login.' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

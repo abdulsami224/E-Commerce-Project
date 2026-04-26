@@ -8,6 +8,9 @@ import Checkout from './pages/Checkout';
 import MyOrders from './pages/MyOrders';
 import OrderConfirmation from './pages/OrderConfirmation';
 import NotFound from './pages/NotFound';
+import Profile from './pages/Profile';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -17,7 +20,6 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
 import ToastProvider from "./components/ToastProvider";
-
 
 function App() {
   return (
@@ -30,6 +32,15 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
 
               <Route path="/" element={
                 <ProtectedRoute>

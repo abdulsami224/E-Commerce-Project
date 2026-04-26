@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import ImageSlider from '../components/ImageSlider';
+import RelatedProducts from '../components/RelatedProducts';
 import { useCart } from '../context/CartContext';
 import { ChevronLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import useRecentlyViewed from '../hooks/useRecentlyViewed';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -12,6 +14,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
   const { addToCart } = useCart();
+  const { addProduct } = useRecentlyViewed();
 
   useEffect(() => {
     if (product) document.title = `ShopApp | ${product.title}`;
@@ -20,11 +23,25 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const { data } = await API.get(`/products/${id}`);
+      // setLoading(true);
+      const { data } = await API.get(`/products/${id}`, {
+        headers: { 'Cache-Control': 'no-cache' }
+      });
       setProduct(data);
+      // setLoading(false);
+
+      // ← save to recently viewed
+      addProduct({
+        _id: data._id,
+        title: data.title,
+        price: data.price,
+        category: data.category,
+        stock: data.stock,
+        images: data.images,
+      });
     };
     fetchProduct();
-  }, [id]); 
+  }, [id]);
 
   const handleAddToCart = async () => {
     if (product.stock === 0) {
@@ -135,6 +152,13 @@ const ProductDetail = () => {
               {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
             </button>
           </div>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 pb-10">
+          <RelatedProducts
+            productId={product?._id}
+            category={product?.category}
+          />
         </div>
       </div>
     </div>

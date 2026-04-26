@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
 import Pagination from '../components/Pagination';
+import RecentlyViewed from '../components/RecentlyViewed';
 import useCategories from '../hooks/useCategories';
 
 const Home = () => {
@@ -123,6 +124,8 @@ const Home = () => {
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
+
+        <RecentlyViewed />
 
       </div>
     </div>

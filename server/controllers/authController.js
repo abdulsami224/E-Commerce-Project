@@ -1,6 +1,9 @@
 import User from '../models/User.js';
 import { hash, compare } from 'bcryptjs';
+import bcrypt from 'bcryptjs'; // ← make sure this is at top
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import { sendResetEmail } from '../config/email.js';
 
 // Generate Token
 const generateToken = (id) => {
@@ -102,34 +105,25 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-import crypto from 'crypto';
-import { sendResetEmail } from '../config/email.js';
-
 // Forgot Password
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
+
     const user = await User.findOne({ email });
 
-    // always return success even if email not found — security best practice
     if (!user) {
       return res.json({ message: 'If this email exists, a reset link has been sent' });
     }
 
-    // generate token
     const token = crypto.randomBytes(32).toString('hex');
 
-    // save hashed token + expiry to DB
-    user.resetPasswordToken = crypto
-      .createHash('sha256')
-      .update(token)
-      .digest('hex');
-    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
-
+    user.resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex');
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    // send email with plain token (not hashed)
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
+
     await sendResetEmail(user.email, resetUrl);
 
     res.json({ message: 'If this email exists, a reset link has been sent' });

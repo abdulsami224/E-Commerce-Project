@@ -3,14 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
-import { Menu, X, ChevronLeft, Sun, Moon, ShoppingBag } from 'lucide-react';
+import { useWishlist } from '../context/WishlistContext';
+import { Menu, X, ChevronLeft, Sun, Moon, ShoppingBag, Heart } from 'lucide-react';
+
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const { cartCount } = useCart();
   const { dark, setDark } = useTheme();
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { wishlistIds } = useWishlist();
+
 
   const handleLogout = () => {
     logout();
@@ -52,8 +56,16 @@ const Navbar = () => {
               {user.role === 'admin' && (
                 <Link to="/admin" className="text-red-500 font-semibold hover:underline">Dashboard</Link>
               )}
+              <Link to="/wishlist" className="relative hover:text-red-500 transition">
+                <Heart size={18} className={wishlistIds.length > 0 ? 'text-red-500 fill-red-500' : ''} />
+                {wishlistIds.length > 0 && (
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {wishlistIds.length}
+                  </span>
+                )}
+              </Link>
 
-                <Link
+              <Link
                   to="/profile"
                   className="flex items-center gap-1.5 text-gray-400 dark:text-gray-500 hover:text-red-500 transition text-sm"
                 >
@@ -146,6 +158,9 @@ const Navbar = () => {
               <Link to="/" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">Home</Link>
               <Link to="/cart" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">Cart ({cartCount})</Link>
               <Link to="/my-orders" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">My Orders</Link>
+              <Link to="/wishlist" onClick={() => setMenuOpen(false)} className="py-2 text-white hover:text-red-500">
+                Wishlist {wishlistIds.length > 0 && `(${wishlistIds.length})`}
+              </Link>
               <Link
                 to="/profile"
                 onClick={() => setMenuOpen(false)}

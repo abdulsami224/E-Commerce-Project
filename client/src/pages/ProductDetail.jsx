@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import ImageSlider from '../components/ImageSlider';
 import RelatedProducts from '../components/RelatedProducts';
+import ReviewSection from '../components/ReviewSection';
+import StarRating from '../components/StarRating';
 import { useCart } from '../context/CartContext';
 import { ChevronLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -130,6 +132,15 @@ const ProductDetail = () => {
               {product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
             </p>
 
+            {product.totalReviews > 0 && (
+              <div className="flex items-center gap-2">
+                <StarRating rating={Math.round(product.averageRating)} size={16} />
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {Number(product.averageRating).toFixed(1)} ({product.totalReviews} review{product.totalReviews !== 1 ? 's' : ''})
+                </span>
+              </div>
+            )}
+
             {/* Quantity Selector */}
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-500 dark:text-gray-400">Qty:</span>
@@ -160,6 +171,7 @@ const ProductDetail = () => {
             category={product?.category}
           />
         </div>
+        <ReviewSection productId={id} />
       </div>
     </div>
   );

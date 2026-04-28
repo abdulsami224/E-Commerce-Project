@@ -104,3 +104,36 @@ export const getOrderById = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const cancelOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    // check order exists
+    if (!order)
+      return res.status(404).json({ message: 'Order not found' });
+
+    // check order belongs to this user
+    if (order.user.toString() !== req.user._id.toString())
+      return res.status(403).json({ message: 'Not authorized' });
+
+    // only pending orders can be cancelled
+    if (order.status !== 'pending')
+      return res.status(400).json({ message: `Cannot cancel order that is already ${order.status}` });
+
+    // update status to cancelled
+    order.status = 'cancelled';
+    await order.save();
+
+    // restore stock for each product
+    for (const item of order.items) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { stock: item.quantity } // ← add back the quantity
+      });
+    }
+
+    res.json({ message: 'Order cancelled successfully', order });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

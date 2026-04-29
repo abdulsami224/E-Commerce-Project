@@ -34,12 +34,12 @@ const AdminDashboard = () => {
 
         const orders = o.data;
 
-        // ✅ Real revenue — delivered only
+        // Real revenue — delivered only
         const revenue = orders
           .filter(o => o.status === 'delivered')
           .reduce((acc, o) => acc + o.totalPrice, 0);
 
-        // ⚠️ Projected — processing + shipped
+        // Projected — processing + shipped
         const projected = orders
           .filter(o => o.status === 'processing' || o.status === 'shipped')
           .reduce((acc, o) => acc + o.totalPrice, 0);
@@ -205,6 +205,16 @@ const AdminDashboard = () => {
               Manage Orders
             </p>
             <p className="text-xs text-gray-400 mt-1">View and update order status</p>
+          </Link>
+          <Link
+            to="/admin/coupons"
+            className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow p-6 hover:border-red-300 dark:hover:border-red-800 transition group"
+          >
+            <p className="text-3xl mb-2">🏷️</p>
+            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-red-500 transition">
+              Manage Coupons
+            </p>
+            <p className="text-xs text-gray-400 mt-1">Create and manage discount codes</p>
           </Link>
         </div>
 

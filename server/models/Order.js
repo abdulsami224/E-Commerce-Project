@@ -19,7 +19,9 @@ const orderSchema = new Schema({
     street: String,
     city: String,
     phone: String
-  }
+  },
+  couponCode: { type: String, default: null },
+  discountAmount: { type: Number, default: 0 },
 }, { timestamps: true });
 
 export default model('Order', orderSchema);

@@ -21,6 +21,7 @@ import Navbar from './components/Navbar';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
+import AdminCoupons from './pages/admin/AdminCoupons';
 import ToastProvider from "./components/ToastProvider";
 
 function App() {
@@ -102,6 +103,12 @@ function App() {
                 <Route path="/wishlist" element={
                   <ProtectedRoute>
                     <Wishlist />
+                  </ProtectedRoute>
+                } />
+
+                <Route path="/admin/coupons" element={
+                  <ProtectedRoute adminOnly>
+                    <AdminCoupons />
                   </ProtectedRoute>
                 } />
 

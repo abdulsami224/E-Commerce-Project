@@ -1,10 +1,10 @@
 import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
+import Coupon from '../models/Coupon.js';
 
-// Place order
-export async function placeOrder(req, res) {
-  const { shippingAddress } = req.body;
+export const placeOrder = async (req, res) => {
+  const { shippingAddress, couponCode, discountAmount } = req.body; 
   try {
     const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
     if (!cart || cart.items.length === 0)
@@ -13,37 +13,48 @@ export async function placeOrder(req, res) {
     for (const item of cart.items) {
       if (item.product.stock < item.quantity) {
         return res.status(400).json({
-          message: `Not enough stock for "${item.product.title}". Only ${item.product.stock} left.`
+          message: `Not enough stock for "${item.product.title}"`
         });
       }
     }
 
-    const items = cart.items.map((item) => ({
+    const items = cart.items.map(item => ({
       product: item.product._id,
       quantity: item.quantity,
       price: item.product.price
     }));
 
-    // Calculate total
-    const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-    // Create order
+    // apply discount if coupon used
+    const finalTotal = discountAmount
+      ? Math.max(0, subtotal - discountAmount)
+      : subtotal;
+
     const order = await Order.create({
       user: req.user._id,
       items,
-      totalPrice,
+      totalPrice: finalTotal,
+      couponCode: couponCode || null,       // ← save coupon used
+      discountAmount: discountAmount || 0,   // ← save discount amount
       shippingAddress
     });
 
-    // Decrease stock for each product ← new
+    // increment coupon usage count
+    if (couponCode) {
+      await Coupon.findOneAndUpdate(
+        { code: couponCode.toUpperCase() },
+        { $inc: { usedCount: 1 } }
+      );
+    }
+
     for (const item of cart.items) {
       await Product.findByIdAndUpdate(item.product._id, {
-        $inc: { stock: -item.quantity }  
+        $inc: { stock: -item.quantity }
       });
     }
-    
-    await Cart.findOneAndDelete({ user: req.user._id });
 
+    await Cart.findOneAndDelete({ user: req.user._id });
     res.status(201).json(order);
   } catch (err) {
     res.status(500).json({ message: err.message });

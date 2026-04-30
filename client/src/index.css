@@ -2,6 +2,18 @@
 
 /* @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap'); */
 
+@theme {
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --color-primary-50:  #fff1f2;
+  --color-primary-100: #ffe4e6;
+  --color-primary-400: #fb7185;
+  --color-primary-500: #ef4444;
+  --color-primary-600: #dc2626;
+  --color-primary-900: #450a0a;
+}
+
 @variant dark (&:where(.dark, .dark *));
 
 :root {

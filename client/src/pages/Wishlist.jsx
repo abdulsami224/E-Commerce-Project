@@ -56,8 +56,8 @@ const Wishlist = () => {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
-            <Heart size={20} className="text-red-500" fill="currentColor" />
+          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center">
+            <Heart size={20} className="text-primary-500" fill="currentColor" />
           </div>
           <div>
             <h1 className="font-heading text-3xl font-bold text-gray-800 dark:text-white">
@@ -71,7 +71,7 @@ const Wishlist = () => {
 
         {products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <div className="w-20 h-20 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center">
+            <div className="w-20 h-20 bg-primary-50 dark:bg-primary-900/20 rounded-full flex items-center justify-center">
               <Heart size={36} className="text-red-300" />
             </div>
             <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300">
@@ -82,7 +82,7 @@ const Wishlist = () => {
             </p>
             <button
               onClick={() => navigate('/')}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-xl transition text-sm font-medium mt-2"
+              className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2.5 rounded-xl transition text-sm font-medium mt-2"
             >
               Explore Products
             </button>
@@ -116,30 +116,30 @@ const Wishlist = () => {
 
                 {/* Info */}
                 <div className="p-3">
-                  <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-2 py-0.5 rounded-full">
+                  <span className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-2 py-0.5 rounded-full">
                     {product.category}
                   </span>
                   <p
-                    className="text-sm font-medium text-gray-800 dark:text-white mt-2 line-clamp-1 cursor-pointer hover:text-red-500 transition"
+                    className="text-sm font-medium text-gray-800 dark:text-white mt-2 line-clamp-1 cursor-pointer hover:text-primary-500 transition"
                     onClick={() => navigate(`/product/${product._id}`)}
                   >
                     {product.title}
                   </p>
-                  <p className="text-red-500 font-bold mt-1">Rs. {product.price}</p>
+                  <p className="text-primary-500 font-bold mt-1">Rs. {product.price}</p>
 
                   {/* Action buttons */}
                   <div className="flex gap-2 mt-3">
                     <button
                       onClick={() => handleAddToCart(product)}
                       disabled={product.stock === 0}
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-red-500 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs py-2 rounded-xl transition font-medium"
+                      className="flex-1 flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs py-2 rounded-xl transition font-medium"
                     >
                       <ShoppingCart size={12} />
                       Add to Cart
                     </button>
                     <button
                       onClick={() => handleRemove(product._id)}
-                      className="w-8 h-8 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:border-red-400 hover:text-red-500 text-gray-400 transition flex-shrink-0"
+                      className="w-8 h-8 flex items-center justify-center border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary-400 hover:text-primary-500 text-gray-400 transition flex-shrink-0"
                     >
                       <Trash2 size={13} />
                     </button>

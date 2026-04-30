@@ -9,7 +9,7 @@ const statusStyles = {
   processing: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
   shipped:    'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
   delivered:  'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-  cancelled:  'bg-red-100 text-red-500 dark:bg-red-900/30 dark:text-red-400',
+  cancelled:  'bg-primary-100 text-primary-500 dark:bg-primary-900/30 dark:text-primary-400',
 };
 
 const MyOrders = () => {
@@ -53,13 +53,13 @@ const MyOrders = () => {
                 toast.error(err.response?.data?.message || 'Failed to cancel order');
               }
             }}
-            className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 rounded-lg transition"
+            className="flex-1 bg-primary-500 hover:bg-primary-600 text-white text-xs py-1.5 rounded-lg transition"
           >
             Yes, Cancel
           </button>
           <button
             onClick={() => toast.dismiss(t.id)}
-            className="flex-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-xs py-1.5 rounded-lg hover:border-red-400 transition"
+            className="flex-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-xs py-1.5 rounded-lg hover:border-primary-400 transition"
           >
             Keep Order
           </button>
@@ -113,7 +113,7 @@ const MyOrders = () => {
                   {order.status === 'pending' && (
                     <button
                       onClick={() => handleCancel(order._id)}
-                      className="flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-red-200 dark:border-red-900 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                      className="flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-primary-200 dark:border-primary-900 text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition"
                     >
                       <X size={11} />
                       Cancel
@@ -144,11 +144,11 @@ const MyOrders = () => {
                   {order.shippingAddress?.phone}
                 </p>
                 <div className="flex items-center gap-3">
-                  <p className="font-bold text-red-500">Rs. {order.totalPrice}</p>
+                  <p className="font-bold text-primary-500">Rs. {order.totalPrice}</p>
                   {/* View receipt button */}
                   <button
                     onClick={() => navigate(`/order-confirmation/${order._id}`)}
-                    className="text-xs text-gray-400 hover:text-red-500 transition underline underline-offset-2"
+                    className="text-xs text-gray-400 hover:text-primary-500 transition underline underline-offset-2"
                   >
                     View Receipt
                   </button>

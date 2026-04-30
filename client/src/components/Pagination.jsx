@@ -30,8 +30,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   const btnBase = "flex items-center justify-center h-9 min-w-[36px] rounded-xl text-sm font-medium transition-all duration-200 px-3";
-  const activeCls = "bg-red-500 text-white shadow-md shadow-red-200 dark:shadow-red-900/30";
-  const inactiveCls = "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-red-400 hover:text-red-500 dark:hover:border-red-500 dark:hover:text-red-400";
+  const activeCls = "bg-primary-500 text-white shadow-md shadow-primary-200 dark:shadow-primary-900/30";
+  const inactiveCls = "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-primary-400 hover:text-primary-500 dark:hover:border-red-500 dark:hover:text-primary-400";
   const disabledCls = "bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-300 dark:text-gray-600 cursor-not-allowed";
 
   return (

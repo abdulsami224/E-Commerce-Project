@@ -9,7 +9,7 @@ const statusStyles = {
   processing: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
   shipped:    'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
   delivered:  'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-  cancelled:  'bg-red-100 text-red-500 dark:bg-red-900/30 dark:text-red-400',
+  cancelled:  'bg-primary-100 text-primary-500 dark:bg-primary-900/30 dark:text-primary-400',
 };
 
 const AdminOrders = () => {
@@ -48,7 +48,7 @@ const AdminOrders = () => {
           <div className="flex items-center gap-3">
             <Link
               to="/admin"
-              className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-400 transition text-gray-500 dark:text-gray-400"
+              className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-primary-400 transition text-gray-500 dark:text-gray-400"
             >
               <ChevronLeft size={18} />
             </Link>
@@ -68,7 +68,7 @@ const AdminOrders = () => {
                 onClick={() => setFilter(s)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                   filter === s
-                    ? 'bg-red-500 text-white'
+                    ? 'bg-primary-500 text-white'
                     : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
@@ -82,7 +82,7 @@ const AdminOrders = () => {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="sm:hidden w-full mb-4 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm"
+          className="sm:hidden w-full mb-4 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 text-sm"
         >
           <option value="">All Orders</option>
           {['pending','processing','shipped','delivered','cancelled'].map(s => (
@@ -131,7 +131,7 @@ const AdminOrders = () => {
                     <select
                       value={order.status}
                       onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      className="text-xs px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+                      className="text-xs px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-400 transition"
                     >
                       {['pending','processing','shipped','delivered','cancelled'].map(s => (
                         <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
@@ -170,7 +170,7 @@ const AdminOrders = () => {
                   <p className="text-xs text-gray-400">
                     📍 {order.shippingAddress?.street}, {order.shippingAddress?.city} · 📞 {order.shippingAddress?.phone}
                   </p>
-                  <p className="font-bold text-red-500">Total: Rs. {order.totalPrice}</p>
+                  <p className="font-bold text-primary-500">Total: Rs. {order.totalPrice}</p>
                 </div>
 
               </div>

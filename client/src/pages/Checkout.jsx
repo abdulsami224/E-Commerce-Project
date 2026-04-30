@@ -106,7 +106,7 @@ const Checkout = () => {
     }
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm";
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-10">
@@ -173,7 +173,7 @@ const Checkout = () => {
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                       onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm uppercase"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm uppercase"
                     />
                   </div>
                   <button
@@ -198,7 +198,7 @@ const Checkout = () => {
                   </div>
                   <button
                     onClick={handleRemoveCoupon}
-                    className="text-green-400 hover:text-red-500 transition"
+                    className="text-green-400 hover:text-primary-500 transition"
                   >
                     <X size={14} />
                   </button>
@@ -225,14 +225,14 @@ const Checkout = () => {
               <div className="h-px bg-gray-100 dark:bg-gray-800" />
               <div className="flex justify-between font-bold text-gray-800 dark:text-white">
                 <span>Total</span>
-                <span className="text-red-500 text-xl">Rs. {finalTotal}</span>
+                <span className="text-primary-500 text-xl">Rs. {finalTotal}</span>
               </div>
             </div>
 
             <button
               onClick={handleOrder}
               disabled={loading || cartItems.length === 0}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

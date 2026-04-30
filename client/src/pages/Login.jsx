@@ -39,7 +39,7 @@ const Login = () => {
         <p className="text-center text-gray-400 text-sm mb-6">Login to your account</p>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/30 text-red-500 text-sm px-4 py-3 rounded-lg mb-4">
+          <div className="bg-primary-50 dark:bg-primary-900/30 text-primary-500 text-sm px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
@@ -48,18 +48,18 @@ const Login = () => {
           <input
             name="email" type="email" placeholder="Email Address"
             onChange={handleChange} required
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition"
           />
           <input
             name="password" type="password" placeholder="Password"
             onChange={handleChange} required
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition"
           />
 
           <div className="text-right">
             <Link
               to="/forgot-password"
-              className="text-xs text-gray-400 hover:text-red-500 transition"
+              className="text-xs text-gray-400 hover:text-primary-500 transition"
             >
               Forgot password?
             </Link>
@@ -67,7 +67,7 @@ const Login = () => {
           
           <button
             type="submit" disabled={loading}
-            className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50"
+            className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -75,7 +75,7 @@ const Login = () => {
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           Don't have an account?{' '}
-          <Link to="/register" className="text-red-500 font-medium hover:underline">Register</Link>
+          <Link to="/register" className="text-primary-500 font-medium hover:underline">Register</Link>
         </p>
       </div>
     </div>

@@ -8,7 +8,7 @@ const statusStyles = {
   processing: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
   shipped:    'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
   delivered:  'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-  cancelled:  'bg-red-100 text-red-500 dark:bg-red-900/30 dark:text-red-400',
+  cancelled:  'bg-primary-100 text-primary-500 dark:bg-primary-900/30 dark:text-primary-400',
 };
 
 const OrderConfirmation = () => {
@@ -55,7 +55,7 @@ const OrderConfirmation = () => {
         {/* Back */}
         <button
           onClick={() => navigate('/my-orders')}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 mb-6 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-primary-500 mb-6 transition"
         >
           <ChevronLeft size={16} /> Back to Orders
         </button>
@@ -89,7 +89,7 @@ const OrderConfirmation = () => {
           {/* Invoice Header */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 dark:border-gray-800">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-red-500 rounded-xl flex items-center justify-center">
+              <div className="w-9 h-9 bg-primary-500 rounded-xl flex items-center justify-center">
                 <ShoppingBag size={18} className="text-white" />
               </div>
               <div>
@@ -118,11 +118,11 @@ const OrderConfirmation = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                <MapPin size={14} className="text-red-400 flex-shrink-0" />
+                <MapPin size={14} className="text-primary-400 flex-shrink-0" />
                 <span>{order.shippingAddress?.street}, {order.shippingAddress?.city}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                <Phone size={14} className="text-red-400 flex-shrink-0" />
+                <Phone size={14} className="text-primary-400 flex-shrink-0" />
                 <span>{order.shippingAddress?.phone}</span>
               </div>
             </div>
@@ -183,7 +183,7 @@ const OrderConfirmation = () => {
               <div className="h-px bg-gray-100 dark:bg-gray-800 my-1" />
               <div className="flex justify-between font-bold text-gray-800 dark:text-white">
                 <span>Total</span>
-                <span className="text-red-500 text-lg">Rs. {order.totalPrice}</span>
+                <span className="text-primary-500 text-lg">Rs. {order.totalPrice}</span>
               </div>
             </div>
           </div>
@@ -192,7 +192,7 @@ const OrderConfirmation = () => {
           <div className="px-6 py-4 text-center">
             <p className="text-xs text-gray-400">
               Questions about your order?{' '}
-              <span className="text-red-500 font-medium cursor-pointer hover:underline">
+              <span className="text-primary-500 font-medium cursor-pointer hover:underline">
                 Contact Support
               </span>
             </p>
@@ -203,14 +203,14 @@ const OrderConfirmation = () => {
         <div className="flex flex-col sm:flex-row gap-3 mt-6">
           <button
             onClick={handlePrint}
-            className="flex-1 flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-3 rounded-xl hover:border-red-400 hover:text-red-500 transition text-sm font-medium"
+            className="flex-1 flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 py-3 rounded-xl hover:border-primary-400 hover:text-primary-500 transition text-sm font-medium"
           >
             <Printer size={16} />
             Print Receipt
           </button>
           <Link
             to="/"
-            className="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition text-sm font-medium"
+            className="flex-1 flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-xl transition text-sm font-medium"
           >
             <ShoppingBag size={16} />
             Continue Shopping

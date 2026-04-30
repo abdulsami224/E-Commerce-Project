@@ -161,7 +161,7 @@ const AdminDashboard = () => {
               { label: 'Pending',    count: stats.pending,                                                              color: 'bg-yellow-400', text: 'text-yellow-600' },
               { label: 'Processing', count: stats.orders - stats.pending - stats.delivered - stats.cancelled,           color: 'bg-blue-400',   text: 'text-blue-600' },
               { label: 'Delivered',  count: stats.delivered,                                                            color: 'bg-green-400',  text: 'text-green-600' },
-              { label: 'Cancelled',  count: stats.cancelled,                                                            color: 'bg-red-400',    text: 'text-red-500' },
+              { label: 'Cancelled',  count: stats.cancelled,                                                            color: 'bg-red-400',    text: 'text-primary-500' },
             ].map(({ label, count, color, text }) => {
               const percent = stats.orders > 0
                 ? Math.round((count / stats.orders) * 100)
@@ -191,7 +191,7 @@ const AdminDashboard = () => {
             className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow p-6 hover:border-red-300 dark:hover:border-red-800 transition group"
           >
             <p className="text-3xl mb-2">📦</p>
-            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-red-500 transition">
+            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-primary-500 transition">
               Manage Products
             </p>
             <p className="text-xs text-gray-400 mt-1">Add, edit, delete products</p>
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
             className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow p-6 hover:border-red-300 dark:hover:border-red-800 transition group"
           >
             <p className="text-3xl mb-2">🧾</p>
-            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-red-500 transition">
+            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-primary-500 transition">
               Manage Orders
             </p>
             <p className="text-xs text-gray-400 mt-1">View and update order status</p>
@@ -211,7 +211,7 @@ const AdminDashboard = () => {
             className="flex-1 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow p-6 hover:border-red-300 dark:hover:border-red-800 transition group"
           >
             <p className="text-3xl mb-2">🏷️</p>
-            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-red-500 transition">
+            <p className="font-semibold text-gray-700 dark:text-white group-hover:text-primary-500 transition">
               Manage Coupons
             </p>
             <p className="text-xs text-gray-400 mt-1">Create and manage discount codes</p>

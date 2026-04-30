@@ -40,8 +40,8 @@ const ProductCard = ({ product }) => {
           onClick={handleWishlist}
           className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all duration-200 ${
             wishlisted
-              ? 'bg-red-500 text-white scale-110'
-              : 'bg-white/80 dark:bg-gray-900/80 text-gray-400 hover:text-red-500 hover:scale-110'
+              ? 'bg-primary-500 text-white scale-110'
+              : 'bg-white/80 dark:bg-gray-900/80 text-gray-400 hover:text-primary-500 hover:scale-110'
           }`}
         >
           <Heart size={14} fill={wishlisted ? 'currentColor' : 'none'} />
@@ -59,7 +59,7 @@ const ProductCard = ({ product }) => {
 
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-2 py-0.5 rounded-full font-medium">
+          <span className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-2 py-0.5 rounded-full font-medium">
             {product.category}
           </span>
           {product.stock === 0 && (
@@ -84,7 +84,7 @@ const ProductCard = ({ product }) => {
         )}
 
         <div className="flex items-center justify-between mt-3">
-          <p className="text-red-500 font-bold text-lg">Rs. {product.price}</p>
+          <p className="text-primary-500 font-bold text-lg">Rs. {product.price}</p>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -93,7 +93,7 @@ const ProductCard = ({ product }) => {
             disabled={product.stock === 0}
             className={`text-xs px-3 py-1.5 rounded-xl font-medium transition ${
               product.stock > 0
-                ? 'bg-red-500 hover:bg-red-600 text-white'
+                ? 'bg-primary-500 hover:bg-primary-600 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
             }`}
           >

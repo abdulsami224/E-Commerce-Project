@@ -84,7 +84,7 @@ const ImageUploader = ({ images, setImages }) => {
               <X size={14} className="text-white" />
             </button>
             {index === 0 && (
-              <span className="absolute top-0.5 left-0.5 bg-red-500 text-white text-[9px] px-1 rounded font-medium leading-4">
+              <span className="absolute top-0.5 left-0.5 bg-primary-500 text-white text-[9px] px-1 rounded font-medium leading-4">
                 Main
               </span>
             )}
@@ -109,8 +109,8 @@ const ImageUploader = ({ images, setImages }) => {
             onDrop={handleDrop}
             className={`relative w-16 h-16 rounded-xl border-2 border-dashed cursor-pointer flex flex-col items-center justify-center gap-0.5 transition flex-shrink-0 ${
               dragOver
-                ? 'border-red-400 bg-red-50 dark:bg-red-900/10'
-                : 'border-gray-300 dark:border-gray-600 hover:border-red-400 bg-gray-50 dark:bg-gray-800'
+                ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/10'
+                : 'border-gray-300 dark:border-gray-600 hover:border-primary-400 bg-gray-50 dark:bg-gray-800'
             }`}
           >
             <input
@@ -124,7 +124,7 @@ const ImageUploader = ({ images, setImages }) => {
               <div className="w-5 h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
             ) : (
               <>
-                <ImagePlus size={16} className="text-red-400" />
+                <ImagePlus size={16} className="text-primary-400" />
                 <span className="text-[9px] text-gray-400 leading-tight text-center">
                   Upload
                 </span>

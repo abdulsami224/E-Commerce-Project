@@ -43,7 +43,7 @@ const CategorySelect = ({ value, onChange, categories }) => {
     onChange('');
   };
 
-  const inputClass = "px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm w-full";
+  const inputClass = "px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm w-full";
 
   return (
     <div className="flex flex-col gap-2">
@@ -96,14 +96,14 @@ const CategorySelect = ({ value, onChange, categories }) => {
             <button
               type="button"
               onClick={handleCustomConfirm}
-              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl transition flex items-center gap-1 text-sm font-medium whitespace-nowrap"
+              className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition flex items-center gap-1 text-sm font-medium whitespace-nowrap"
             >
               <Plus size={14} /> Add
             </button>
             <button
               type="button"
               onClick={handleCancel}
-              className="px-3 py-2 border border-gray-200 dark:border-gray-700 text-gray-400 hover:text-red-500 rounded-xl transition"
+              className="px-3 py-2 border border-gray-200 dark:border-gray-700 text-gray-400 hover:text-primary-500 rounded-xl transition"
             >
               <X size={14} />
             </button>
@@ -112,13 +112,13 @@ const CategorySelect = ({ value, onChange, categories }) => {
           {/* Live preview — shows lowercase */}
           {customInput && !error && (
             <p className="text-xs text-gray-400 px-1">
-              Will be saved as: <span className="text-red-400 font-medium">"{customInput.trim().toLowerCase()}"</span>
+              Will be saved as: <span className="text-primary-400 font-medium">"{customInput.trim().toLowerCase()}"</span>
             </p>
           )}
 
           {/* Error message */}
           {error && (
-            <p className="text-xs text-red-500 px-1">{error}</p>
+            <p className="text-xs text-primary-500 px-1">{error}</p>
           )}
         </div>
       )}
@@ -126,7 +126,7 @@ const CategorySelect = ({ value, onChange, categories }) => {
       {/* Show selected value as badge */}
       {value && !showCustom && (
         <p className="text-xs text-gray-400 px-1">
-          Selected: <span className="text-red-400 font-medium">"{value}"</span>
+          Selected: <span className="text-primary-400 font-medium">"{value}"</span>
         </p>
       )}
     </div>

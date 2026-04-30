@@ -80,7 +80,7 @@ const AdminCoupons = () => {
                 toast.error('Failed to delete');
               }
             }}
-            className="flex-1 bg-red-500 text-white text-xs py-1.5 rounded-lg"
+            className="flex-1 bg-primary-500 text-white text-xs py-1.5 rounded-lg"
           >
             Delete
           </button>
@@ -95,7 +95,7 @@ const AdminCoupons = () => {
     ), { duration: Infinity });
   };
 
-  const inputClass = "px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm";
+  const inputClass = "px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-10">
@@ -104,7 +104,7 @@ const AdminCoupons = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Link to="/admin" className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-400 transition text-gray-500 dark:text-gray-400">
+            <Link to="/admin" className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-primary-400 transition text-gray-500 dark:text-gray-400">
               <ChevronLeft size={18} />
             </Link>
             <div>
@@ -116,7 +116,7 @@ const AdminCoupons = () => {
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
+            className="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
           >
             {showForm ? <X size={16} /> : <Plus size={16} />}
             {showForm ? 'Cancel' : 'Add Coupon'}
@@ -187,13 +187,13 @@ const AdminCoupons = () => {
             <div className="flex gap-3 mt-5">
               <button
                 onClick={handleSubmit}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition text-sm"
+                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition text-sm"
               >
                 Create Coupon
               </button>
               <button
                 onClick={() => { setShowForm(false); setForm(emptyForm); }}
-                className="px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 hover:border-red-400 transition text-sm"
+                className="px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 hover:border-primary-400 transition text-sm"
               >
                 Cancel
               </button>
@@ -235,7 +235,7 @@ const AdminCoupons = () => {
                         {coupon.code}
                       </span>
                     </td>
-                    <td className="px-6 py-4 font-semibold text-red-500">
+                    <td className="px-6 py-4 font-semibold text-primary-500">
                       {coupon.discountType === 'percentage'
                         ? `${coupon.discountValue}% off`
                         : `Rs. ${coupon.discountValue} off`
@@ -279,7 +279,7 @@ const AdminCoupons = () => {
                         </button>
                         <button
                           onClick={() => handleDelete(coupon._id)}
-                          className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 transition"
+                          className="p-2 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 hover:bg-primary-100 transition"
                         >
                           <Trash2 size={14} />
                         </button>

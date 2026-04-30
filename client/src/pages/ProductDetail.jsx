@@ -112,7 +112,7 @@ const ProductDetail = () => {
       <div className="max-w-5xl mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 mb-6 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-primary-500 mb-6 transition"
         >
           <ChevronLeft size={16} />
           Back
@@ -122,12 +122,12 @@ const ProductDetail = () => {
             <ImageSlider images={product.images || []} />
           </div>
           <div className="md:w-1/2 p-8 flex flex-col justify-center gap-4">
-            <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-3 py-1 rounded-full w-fit font-medium">
+            <span className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-3 py-1 rounded-full w-fit font-medium">
               {product.category}
             </span>
             <h1 className="font-heading text-3xl font-bold text-gray-800 dark:text-white">{product.title}</h1>
             <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{product.description}</p>
-            <p className="text-red-500 font-bold text-3xl">Rs. {product.price}</p>
+            <p className="text-primary-500 font-bold text-3xl">Rs. {product.price}</p>
             <p className={`text-sm font-medium ${product.stock > 0 ? 'text-green-500' : 'text-gray-400'}`}>
               {product.stock > 0 ? `✓ In Stock (${product.stock} available)` : '✗ Out of Stock'}
             </p>
@@ -157,7 +157,7 @@ const ProductDetail = () => {
               className={`w-full font-semibold py-3 rounded-xl transition mt-2 ${
                 product.stock === 0
                   ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                  : 'bg-red-500 hover:bg-red-600 text-white'
+                  : 'bg-primary-500 hover:bg-primary-600 text-white'
               }`}
             >
               {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}

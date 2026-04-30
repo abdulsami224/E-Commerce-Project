@@ -94,10 +94,10 @@ const Profile = () => {
     processing: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
     shipped:    'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
     delivered:  'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-    cancelled:  'bg-red-100 text-red-500 dark:bg-red-900/30 dark:text-red-400',
+    cancelled:  'bg-primary-100 text-primary-500 dark:bg-primary-900/30 dark:text-primary-400',
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm";
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm";
 
   const tabs = [
     { id: 'profile', label: 'Profile Info', icon: User },
@@ -112,7 +112,7 @@ const Profile = () => {
         {/* Back */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 mb-6 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-primary-500 mb-6 transition"
         >
           <ChevronLeft size={16} /> Back
         </button>
@@ -121,7 +121,7 @@ const Profile = () => {
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 p-6 mb-6">
           <div className="flex items-center gap-4">
             {/* Avatar */}
-            <div className="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center shadow-md shadow-red-200 dark:shadow-red-900/40 flex-shrink-0">
+            <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center shadow-md shadow-primary-200 dark:shadow-primary-900/40 flex-shrink-0">
               <span className="text-white font-heading font-bold text-2xl">
                 {user?.name?.charAt(0).toUpperCase()}
               </span>
@@ -132,7 +132,7 @@ const Profile = () => {
               </h1>
               <p className="text-sm text-gray-400">{user?.email}</p>
               {user?.role === 'admin' && (
-                <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
+                <span className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
                   Admin
                 </span>
               )}
@@ -153,8 +153,8 @@ const Profile = () => {
               onClick={() => setActiveTab(id)}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 activeTab === id
-                  ? 'bg-red-500 text-white shadow-md'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400'
+                  ? 'bg-primary-500 text-white shadow-md'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400'
               }`}
             >
               <Icon size={15} />
@@ -210,7 +210,7 @@ const Profile = () => {
               <button
                 onClick={handleProfileUpdate}
                 disabled={loading}
-                className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -245,7 +245,7 @@ const Profile = () => {
                   <button
                     type="button"
                     onClick={() => setShowCurrentPw(!showCurrentPw)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-500 transition"
                   >
                     {showCurrentPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -269,7 +269,7 @@ const Profile = () => {
                   <button
                     type="button"
                     onClick={() => setShowNewPw(!showNewPw)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-500 transition"
                   >
                     {showNewPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -296,7 +296,7 @@ const Profile = () => {
                   <p className={`text-xs px-1 ${
                     passwordForm.newPassword === passwordForm.confirmPassword
                       ? 'text-green-500'
-                      : 'text-red-500'
+                      : 'text-primary-500'
                   }`}>
                     {passwordForm.newPassword === passwordForm.confirmPassword
                       ? '✓ Passwords match'
@@ -309,7 +309,7 @@ const Profile = () => {
               <button
                 onClick={handlePasswordUpdate}
                 disabled={loading}
-                className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -346,7 +346,7 @@ const Profile = () => {
                   <div
                     key={order._id}
                     onClick={() => navigate(`/order-confirmation/${order._id}`)}
-                    className="border border-gray-100 dark:border-gray-800 rounded-xl p-4 hover:border-red-200 dark:hover:border-red-900 transition cursor-pointer"
+                    className="border border-gray-100 dark:border-gray-800 rounded-xl p-4 hover:border-primary-200 dark:hover:border-red-900 transition cursor-pointer"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-xs font-mono text-gray-400">
@@ -363,7 +363,7 @@ const Profile = () => {
                           month: 'short', day: 'numeric', year: 'numeric'
                         })}
                       </p>
-                      <p className="font-bold text-red-500 text-sm">
+                      <p className="font-bold text-primary-500 text-sm">
                         Rs. {order.totalPrice}
                       </p>
                     </div>

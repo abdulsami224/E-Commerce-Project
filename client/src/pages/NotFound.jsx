@@ -29,13 +29,13 @@ const NotFound = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-red-400 hover:text-red-500 transition text-sm font-medium"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-primary-400 hover:text-primary-500 transition text-sm font-medium"
           >
             ← Go Back
           </button>
           <Link
             to="/"
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white transition text-sm font-medium text-center"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-600 text-white transition text-sm font-medium text-center"
           >
             Go to Home
           </Link>

@@ -37,7 +37,7 @@ const ForgotPassword = () => {
         {/* Back to login */}
         <Link
           to="/login"
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 mb-6 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-primary-500 mb-6 transition"
         >
           <ChevronLeft size={16} /> Back to Login
         </Link>
@@ -47,8 +47,8 @@ const ForgotPassword = () => {
           {!sent ? (
             <>
               {/* Icon */}
-              <div className="w-14 h-14 bg-red-100 dark:bg-red-900/30 rounded-2xl flex items-center justify-center mb-5">
-                <Mail size={24} className="text-red-500" />
+              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center mb-5">
+                <Mail size={24} className="text-primary-500" />
               </div>
 
               <h2 className="font-heading text-2xl font-bold text-gray-800 dark:text-white mb-2">
@@ -67,14 +67,14 @@ const ForgotPassword = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -97,19 +97,19 @@ const ForgotPassword = () => {
               <p className="text-gray-400 text-sm mb-2 leading-relaxed">
                 We sent a reset link to
               </p>
-              <p className="text-red-500 font-semibold text-sm mb-6 break-all">
+              <p className="text-primary-500 font-semibold text-sm mb-6 break-all">
                 {email}
               </p>
 
               <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-6">
                 <p className="text-xs text-gray-400 leading-relaxed">
-                  Didn't receive the email? Check your spam folder. The link expires in <span className="text-red-400 font-medium">15 minutes</span>.
+                  Didn't receive the email? Check your spam folder. The link expires in <span className="text-primary-400 font-medium">15 minutes</span>.
                 </p>
               </div>
 
               <button
                 onClick={() => setSent(false)}
-                className="w-full border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 py-3 rounded-xl hover:border-red-400 hover:text-red-500 transition text-sm font-medium"
+                className="w-full border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 py-3 rounded-xl hover:border-primary-400 hover:text-primary-500 transition text-sm font-medium"
               >
                 Try different email
               </button>
@@ -118,7 +118,7 @@ const ForgotPassword = () => {
 
           <p className="text-center text-sm text-gray-400 mt-6">
             Remember your password?{' '}
-            <Link to="/login" className="text-red-500 font-medium hover:underline">
+            <Link to="/login" className="text-primary-500 font-medium hover:underline">
               Login
             </Link>
           </p>

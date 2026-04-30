@@ -69,7 +69,7 @@ const Cart = () => {
       <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300">Your cart is empty</h2>
       <button
         onClick={() => navigate('/')}
-        className="bg-red-500 text-white px-6 py-2.5 rounded-xl hover:bg-red-600 transition"
+        className="bg-primary-500 text-white px-6 py-2.5 rounded-xl hover:bg-primary-600 transition"
       >
         Shop Now
       </button>
@@ -99,7 +99,7 @@ const Cart = () => {
               />
                 <div className="flex-1 text-center sm:text-left">
                   <h4 className="font-semibold text-gray-800 dark:text-white">{product.title}</h4>
-                  <p className="text-red-500 font-bold">Rs. {product.price}</p>
+                  <p className="text-primary-500 font-bold">Rs. {product.price}</p>
                 </div>
 
                 {/* Quantity Controls */}
@@ -130,7 +130,7 @@ const Cart = () => {
                 {/* Remove */}
                 <button
                   onClick={() => handleRemove(product._id)}
-                  className="text-red-400 hover:text-red-600 text-xl transition"
+                  className="text-primary-400 hover:text-primary-600 text-xl transition"
                 >
                   ✕
                 </button>
@@ -143,11 +143,11 @@ const Cart = () => {
         <div className="mt-8 bg-white dark:bg-gray-900 rounded-2xl shadow p-6 border border-gray-100 dark:border-gray-800">
           <div className="flex justify-between items-center mb-4">
             <span className="text-gray-500 dark:text-gray-400 font-medium">Total Amount</span>
-            <span className="text-2xl font-bold text-red-500">Rs. {cartTotal}</span>
+            <span className="text-2xl font-bold text-primary-500">Rs. {cartTotal}</span>
           </div>
           <button
             onClick={() => navigate('/checkout')}
-            className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition"
+            className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition"
           >
             Proceed to Checkout →
           </button>

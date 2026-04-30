@@ -21,7 +21,7 @@ const RecentlyViewed = ({ currentProductId }) => {
         </h2>
         <button
           onClick={clearAll}
-          className="text-xs text-gray-400 hover:text-red-500 transition"
+          className="text-xs text-gray-400 hover:text-primary-500 transition"
         >
           Clear all
         </button>
@@ -33,7 +33,7 @@ const RecentlyViewed = ({ currentProductId }) => {
           <div
             key={product._id}
             onClick={() => navigate(`/product/${product._id}`)}
-            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden cursor-pointer hover:shadow-md hover:border-red-200 dark:hover:border-red-900 transition-all duration-200 group"
+            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden cursor-pointer hover:shadow-md hover:border-primary-200 dark:hover:border-red-900 transition-all duration-200 group"
           >
             {/* Image */}
             <div className="h-28 overflow-hidden bg-gray-100 dark:bg-gray-800">
@@ -50,7 +50,7 @@ const RecentlyViewed = ({ currentProductId }) => {
               <p className="text-xs font-medium text-gray-700 dark:text-gray-300 line-clamp-2 leading-tight">
                 {product.title}
               </p>
-              <p className="text-red-500 font-bold text-sm mt-1">
+              <p className="text-primary-500 font-bold text-sm mt-1">
                 Rs. {product.price}
               </p>
               {product.stock === 0 && (

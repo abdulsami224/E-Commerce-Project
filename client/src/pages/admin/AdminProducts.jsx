@@ -99,13 +99,13 @@ const AdminProducts = () => {
                 toast.error('Failed to delete product');
               }
             }}
-            className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs py-1.5 rounded-lg transition"
+            className="flex-1 bg-primary-500 hover:bg-primary-600 text-white text-xs py-1.5 rounded-lg transition"
           >
             Delete
           </button>
           <button
             onClick={() => toast.dismiss(t.id)}
-            className="flex-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-xs py-1.5 rounded-lg hover:border-red-400 transition"
+            className="flex-1 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-xs py-1.5 rounded-lg hover:border-primary-400 transition"
           >
             Cancel
           </button>
@@ -145,7 +145,7 @@ const AdminProducts = () => {
             <div className="flex items-center gap-3">
               <Link
                 to="/admin"
-                className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-red-400 transition text-gray-500 dark:text-gray-400"
+                className="p-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:border-primary-400 transition text-gray-500 dark:text-gray-400"
               >
                 <ChevronLeft size={18} />
               </Link>
@@ -158,7 +158,7 @@ const AdminProducts = () => {
             </div>
             <button
               onClick={() => { setShowForm(!showForm); setForm(emptyForm); setEditId(null); }}
-              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
+              className="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"
             >
               {showForm ? <X size={16} /> : <Plus size={16} />}
               {showForm ? 'Cancel' : 'Add Product'}
@@ -175,7 +175,7 @@ const AdminProducts = () => {
               type="text"
               placeholder="Search products by name..."
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm"
             />
           </div>
         </div>
@@ -187,7 +187,7 @@ const AdminProducts = () => {
               <h3 className="font-semibold text-gray-800 dark:text-white text-lg">
                 {editId ? 'Edit Product' : 'Add New Product'}
               </h3>
-              <button onClick={handleCancel} className="text-gray-400 hover:text-red-500 transition">
+              <button onClick={handleCancel} className="text-gray-400 hover:text-primary-500 transition">
                 <X size={20} />
               </button>
             </div>
@@ -204,7 +204,7 @@ const AdminProducts = () => {
                   placeholder={field.placeholder}
                   value={form[field.name]}
                   onChange={handleChange}
-                  className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm"
+                  className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm"
                 />
               ))}
 
@@ -225,7 +225,7 @@ const AdminProducts = () => {
                 value={form.description}
                 onChange={handleChange}
                 rows={3}
-                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm sm:col-span-2 resize-none"
+                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm sm:col-span-2 resize-none"
               />
             </div>
 
@@ -234,13 +234,13 @@ const AdminProducts = () => {
             <div className="flex gap-3 mt-5">
               <button
                 onClick={handleSubmit}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition text-sm"
+                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition text-sm"
               >
                 {editId ? 'Update Product' : 'Save Product'}
               </button>
               <button
                 onClick={handleCancel}
-                className="px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-red-400 transition text-sm"
+                className="px-6 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-primary-400 transition text-sm"
               >
                 Cancel
               </button>
@@ -289,7 +289,7 @@ const AdminProducts = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="bg-red-100 dark:bg-red-900/30 text-red-500 text-xs px-2 py-0.5 rounded-full">
+                        <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-500 text-xs px-2 py-0.5 rounded-full">
                           {p.category}
                         </span>
                       </td>
@@ -297,7 +297,7 @@ const AdminProducts = () => {
                         Rs. {p.price}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.stock > 0 ? 'bg-green-100 text-green-600 dark:bg-green-900/30' : 'bg-red-100 text-red-500 dark:bg-red-900/30'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.stock > 0 ? 'bg-green-100 text-green-600 dark:bg-green-900/30' : 'bg-primary-100 text-primary-500 dark:bg-primary-900/30'}`}>
                           {p.stock > 0 ? `${p.stock} in stock` : 'Out of stock'}
                         </span>
                       </td>
@@ -311,7 +311,7 @@ const AdminProducts = () => {
                           </button>
                           <button
                             onClick={() => handleDelete(p._id)}
-                            className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 transition"
+                            className="p-2 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-900/40 transition"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -335,14 +335,14 @@ const AdminProducts = () => {
                   />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-800 dark:text-white text-sm line-clamp-1">{p.title}</p>
-                    <p className="text-red-500 font-bold text-sm">Rs. {p.price}</p>
+                    <p className="text-primary-500 font-bold text-sm">Rs. {p.price}</p>
                     <span className="text-xs text-gray-400">{p.category} · {p.stock} in stock</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     <button onClick={() => handleEdit(p)} className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500">
                       <Pencil size={14} />
                     </button>
-                    <button onClick={() => handleDelete(p._id)} className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500">
+                    <button onClick={() => handleDelete(p._id)} className="p-2 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500">
                       <Trash2 size={14} />
                     </button>
                   </div>

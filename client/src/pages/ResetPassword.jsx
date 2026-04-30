@@ -48,7 +48,7 @@ const ResetPassword = () => {
     }
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm";
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition text-sm";
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
@@ -57,8 +57,8 @@ const ResetPassword = () => {
         {!done ? (
           <>
             {/* Icon */}
-            <div className="w-14 h-14 bg-red-100 dark:bg-red-900/30 rounded-2xl flex items-center justify-center mb-5">
-              <Lock size={24} className="text-red-500" />
+            <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center mb-5">
+              <Lock size={24} className="text-primary-500" />
             </div>
 
             <h2 className="font-heading text-2xl font-bold text-gray-800 dark:text-white mb-2">
@@ -87,7 +87,7 @@ const ResetPassword = () => {
                   <button
                     type="button"
                     onClick={() => setShowPw(!showPw)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-500 transition"
                   >
                     {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -111,7 +111,7 @@ const ResetPassword = () => {
                   <button
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-500 transition"
                   >
                     {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -122,7 +122,7 @@ const ResetPassword = () => {
                   <p className={`text-xs px-1 ${
                     form.password === form.confirmPassword
                       ? 'text-green-500'
-                      : 'text-red-500'
+                      : 'text-primary-500'
                   }`}>
                     {form.password === form.confirmPassword
                       ? '✓ Passwords match'
@@ -135,7 +135,7 @@ const ResetPassword = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -161,7 +161,7 @@ const ResetPassword = () => {
 
             <Link
               to="/login"
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center"
+              className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center"
             >
               Go to Login
             </Link>

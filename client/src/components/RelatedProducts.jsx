@@ -36,7 +36,7 @@ const RelatedProducts = ({ productId, category }) => {
           </h2>
           <p className="text-xs text-gray-400 mt-0.5">
             More from{' '}
-            <span className="text-red-400 font-medium capitalize">{category}</span>
+            <span className="text-primary-400 font-medium capitalize">{category}</span>
           </p>
         </div>
       </div>
@@ -64,7 +64,7 @@ const RelatedProducts = ({ productId, category }) => {
                 navigate(`/product/${product._id}`);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden cursor-pointer hover:shadow-md hover:border-red-200 dark:hover:border-red-900 transition-all duration-200 group"
+              className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden cursor-pointer hover:shadow-md hover:border-primary-200 dark:hover:border-red-900 transition-all duration-200 group"
             >
               {/* Image */}
               <div className="h-40 overflow-hidden bg-gray-100 dark:bg-gray-800">
@@ -78,14 +78,14 @@ const RelatedProducts = ({ productId, category }) => {
 
               {/* Info */}
               <div className="p-3">
-                <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-500 px-2 py-0.5 rounded-full font-medium capitalize">
+                <span className="text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-500 px-2 py-0.5 rounded-full font-medium capitalize">
                   {product.category}
                 </span>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300 line-clamp-2 leading-tight mt-2">
                   {product.title}
                 </p>
                 <div className="flex items-center justify-between mt-2">
-                  <p className="text-red-500 font-bold">
+                  <p className="text-primary-500 font-bold">
                     Rs. {product.price}
                   </p>
                   {product.stock === 0 && (

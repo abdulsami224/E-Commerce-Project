@@ -60,7 +60,7 @@ const ImageSlider = ({ images }) => {
             onClick={() => setCurrent(i)}
             className={`rounded-full transition-all duration-300 ${
               i === current
-                ? 'w-5 h-2 bg-red-500'       // active dot — wider pill shape
+                ? 'w-5 h-2 bg-primary-500'       // active dot — wider pill shape
                 : 'w-2 h-2 bg-white/60 hover:bg-white/90'  // inactive dot
             }`}
           />

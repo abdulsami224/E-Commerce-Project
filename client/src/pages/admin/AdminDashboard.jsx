@@ -21,18 +21,22 @@ const AdminDashboard = () => {
     cancelled: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [lowStockProducts, setLowStockProducts] = useState([]);
 
   useEffect(() => {
     document.title = 'ShopApp | Admin Dashboard';
 
     const load = async () => {
       try {
-        const [p, o] = await Promise.all([
+        const [p, o, ls] = await Promise.all([
           API.get('/products'),
-          API.get('/orders/all')
+          API.get('/orders/all'),
+          API.get('/products/low-stock')  
         ]);
 
         const orders = o.data;
+        setLowStockProducts(ls.data);
+        
 
         // Real revenue — delivered only
         const revenue = orders
@@ -183,6 +187,63 @@ const AdminDashboard = () => {
             })}
           </div>
         </div>
+
+        {/* Low Stock Alert */}
+        {lowStockProducts.length > 0 && (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow border border-yellow-200 dark:border-yellow-900/50 p-6 mb-8">
+
+            {/* Header */}
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-lg">⚠️</span>
+              <p className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">
+                Low Stock Alert
+              </p>
+              <span className="ml-auto text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 px-2 py-0.5 rounded-full font-medium">
+                {lowStockProducts.length} product{lowStockProducts.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+
+            {/* Products list */}
+            <div className="flex flex-col gap-3">
+              {lowStockProducts.map((product) => (
+                <div
+                  key={product._id}
+                  className="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-100 dark:border-yellow-900/30"
+                >
+                  {/* Image */}
+                  <img
+                    src={product.images?.[0]?.url || 'https://placehold.co/40x40?text=?'}
+                    alt={product.title}
+                    className="w-10 h-10 rounded-lg object-cover flex-shrink-0 border border-yellow-100 dark:border-yellow-900"
+                  />
+
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-800 dark:text-white line-clamp-1">
+                      {product.title}
+                    </p>
+                    <p className="text-xs text-gray-400 capitalize">{product.category}</p>
+                  </div>
+
+                  {/* Stock badge */}
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-xs font-bold text-yellow-600 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30 px-2.5 py-1 rounded-full">
+                      {product.stock} left
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer link */}
+            <Link
+              to="/admin/products"
+              className="mt-4 flex items-center justify-center text-xs text-yellow-600 dark:text-yellow-400 hover:underline font-medium"
+            >
+              Manage Products →
+            </Link>
+          </div>
+        )}
 
         {/* Quick Links */}
         <div className="flex flex-col sm:flex-row gap-4">

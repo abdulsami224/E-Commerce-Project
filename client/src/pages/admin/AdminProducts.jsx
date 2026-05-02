@@ -297,9 +297,23 @@ const AdminProducts = () => {
                         Rs. {p.price}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.stock > 0 ? 'bg-green-100 text-green-600 dark:bg-green-900/30' : 'bg-primary-100 text-primary-500 dark:bg-primary-900/30'}`}>
-                          {p.stock > 0 ? `${p.stock} in stock` : 'Out of stock'}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                            p.stock === 0
+                              ? 'bg-red-100 text-red-500 dark:bg-red-900/30'
+                              : p.stock <= 5
+                                ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30'
+                                : 'bg-green-100 text-green-600 dark:bg-green-900/30'
+                          }`}>
+                            {p.stock === 0 ? 'Out of stock' : `${p.stock} in stock`}
+                          </span>
+                          {/* Low stock warning badge */}
+                          {p.stock > 0 && p.stock <= 5 && (
+                            <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 px-1.5 py-0.5 rounded-full font-medium flex items-center gap-0.5">
+                              ⚠️ Low
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
@@ -336,7 +350,19 @@ const AdminProducts = () => {
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-800 dark:text-white text-sm line-clamp-1">{p.title}</p>
                     <p className="text-primary-500 font-bold text-sm">Rs. {p.price}</p>
-                    <span className="text-xs text-gray-400">{p.category} · {p.stock} in stock</span>
+                    <span className="text-xs text-gray-400">
+                      {p.category} ·{' '}
+                      <span className={
+                        p.stock === 0
+                          ? 'text-red-500'
+                          : p.stock <= 5
+                            ? 'text-yellow-500'
+                            : 'text-green-500'
+                      }>
+                        {p.stock === 0 ? 'Out of stock' : `${p.stock} in stock`}
+                        {p.stock > 0 && p.stock <= 5 && ' ⚠️'}
+                      </span>
+                    </span>
                   </div>
                   <div className="flex flex-col gap-2">
                     <button onClick={() => handleEdit(p)} className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-500">

@@ -3,12 +3,18 @@ import API from '../api/axios';
 import ProductCard from '../components/ProductCard';
 import Pagination from '../components/Pagination';
 import RecentlyViewed from '../components/RecentlyViewed';
+import PriceRangeSlider from '../components/PriceRangeSlider';
 import useCategories from '../hooks/useCategories';
+import { SlidersHorizontal, X } from 'lucide-react';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
+  const [sort, setSort] = useState('newest');
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [globalPriceRange, setGlobalPriceRange] = useState([0, 10000]);
+  const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -27,7 +33,11 @@ const Home = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       const { data } = await API.get('/products', {
-        params: { search, category, page, limit: 20 }
+        params: {
+          search, category, page, limit: 20, sort,
+          minPrice: priceRange[0],
+          maxPrice: priceRange[1]
+        }
       });
 
       setProducts(data.products);
@@ -42,15 +52,44 @@ const Home = () => {
   };
 
   // reset to page 1 when search or category changes
-  useEffect(() => {
-    setCurrentPage(1);
-    fetchProducts(1);
-  }, [search, category]);
+    useEffect(() => {
+      setCurrentPage(1);
+      fetchProducts(1);
+    }, [search, category, sort, priceRange]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchProducts(page);
   };
+
+  const resetFilters = () => {
+    setSearch('');
+    setCategory('');
+    setSort('newest');
+    setPriceRange(globalPriceRange);
+  };
+
+  const isFiltered =
+    category !== '' ||
+    sort !== 'newest' ||
+    priceRange[0] !== globalPriceRange[0] ||
+    priceRange[1] !== globalPriceRange[1];
+
+  useEffect(() => {
+
+    const fetchPriceRange = async () => {
+      try {
+        const { data } = await API.get('/products/price-range');
+        const min = Math.floor(data.minPrice);
+        const max = Math.ceil(data.maxPrice);
+        setGlobalPriceRange([min, max]);
+        setPriceRange([min, max]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPriceRange();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-4 py-8">
@@ -66,38 +105,99 @@ const Home = () => {
           </p>
         </div>
 
-        {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <input
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => {
-              const value = e.target.value;
-              clearTimeout(searchDebounceRef.current);
-              searchDebounceRef.current = setTimeout(() => {
-                setSearch(value);
-              }, 400); 
-            }}
-            className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition"
-          />
-          <div className="relative">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer"
+        {/* Filters */}
+        <div className="mb-6">
+
+          {/* Top row — search + mobile filter toggle */}
+          <div className="flex gap-3 mb-3">
+            <input
+              placeholder="Search products..."
+              onChange={(e) => {
+                const value = e.target.value;
+                clearTimeout(searchDebounceRef.current);
+                searchDebounceRef.current = setTimeout(() => {
+                  setSearch(value);
+                }, 400);
+              }}
+              className="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 transition text-sm"
+            />
+
+            {/* Mobile: toggle filters button */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="md:hidden flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 text-sm transition hover:border-primary-400"
             >
-              <option value="">All Categories</option>
-              {categories.map((c) => (
-                <option key={c} value={c}>
-                  {c.charAt(0).toUpperCase() + c.slice(1)}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+              <SlidersHorizontal size={15} />
+              Filters
+              {isFiltered && (
+                <span className="w-2 h-2 bg-primary-500 rounded-full" />
+              )}
+            </button>
+          </div>
+
+          {/* Filter controls — always visible on desktop, toggle on mobile */}
+          <div className={`${showFilters ? 'flex' : 'hidden'} md:flex flex-col md:flex-row gap-3`}>
+
+            {/* Category */}
+            <div className="relative md:w-48">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer text-sm"
+              >
+                <option value="">All Categories</option>
+                {categories.map((c) => (
+                  <option key={c} value={c}>
+                    {c.charAt(0).toUpperCase() + c.slice(1)}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
+
+            {/* Sort */}
+            <div className="relative md:w-52">
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer text-sm"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="price-low">Price: Low → High</option>
+                <option value="price-high">Price: High → Low</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Price Range Slider */}
+            <div className="flex-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3">
+              <PriceRangeSlider
+                min={globalPriceRange[0]}
+                max={globalPriceRange[1]}
+                value={priceRange}
+                onChange={setPriceRange}
+              />
+            </div>
+
+            {/* Reset button — only shows when filters active */}
+            {isFiltered && (
+              <button
+                onClick={resetFilters}
+                className="flex items-center gap-1.5 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-primary-400 hover:text-primary-500 transition text-sm font-medium whitespace-nowrap"
+              >
+                <X size={14} />
+                Reset
+              </button>
+            )}
           </div>
         </div>
 

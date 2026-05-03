@@ -136,14 +136,14 @@ const Home = () => {
           </div>
 
           {/* Filter controls — always visible on desktop, toggle on mobile */}
-          <div className={`${showFilters ? 'flex' : 'hidden'} md:flex flex-col md:flex-row gap-3`}>
+          <div className={`${showFilters ? 'flex' : 'hidden'} md:flex flex-col md:flex-row gap-3 md:items-stretch`}>  
 
             {/* Category */}
-            <div className="relative md:w-48">
+            <div className="relative">
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer text-sm"
+                className="appearance-none pl-4 pr-9 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer text-sm w-full"
               >
                 <option value="">All Categories</option>
                 {categories.map((c) => (
@@ -152,7 +152,8 @@ const Home = () => {
                   </option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+              {/* Arrow — inside box using pr-9 padding space */}
+              <div className="pointer-events-none absolute right-3 top-0 bottom-0 flex items-center text-gray-400">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -160,26 +161,26 @@ const Home = () => {
             </div>
 
             {/* Sort */}
-            <div className="relative md:w-52">
+            <div className="relative">
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="w-full appearance-none px-4 py-3 pr-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer text-sm"
+                className="appearance-none pl-4 pr-9 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-400 transition cursor-pointer text-sm w-full"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
                 <option value="price-low">Price: Low → High</option>
                 <option value="price-high">Price: High → Low</option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+              {/* Arrow — inside box */}
+              <div className="pointer-events-none absolute right-3 top-0 bottom-0 flex items-center text-gray-400">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-            </div>
+            </div>  
 
-            {/* Price Range Slider */}
-            <div className="flex-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3">
+            <div className="md:w-1/2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 flex items-center">
               <PriceRangeSlider
                 min={globalPriceRange[0]}
                 max={globalPriceRange[1]}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import API from '../api/axios';
+import OrderTimeline from '../components/OrderTimeline';
 
 const statusStyles = {
   pending:    'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400',
@@ -15,6 +16,7 @@ const statusStyles = {
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedOrder, setExpandedOrder] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -89,74 +91,81 @@ const MyOrders = () => {
         </h2>
 
         <div className="flex flex-col gap-4">
-          {orders.map((order) => (
-            <div
-              key={order._id}
-              className="bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 overflow-hidden"
-            >
-              {/* Order Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 gap-2">
-                <div>
-                  <p className="text-xs text-gray-400">Order ID</p>
-                  <p className="text-sm font-mono text-gray-600 dark:text-gray-300">
-                    {order._id}
-                  </p>
-                </div>
-
-                {/* Status + Cancel button */}
-                <div className="flex items-center gap-2">
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[order.status]}`}>
-                    {order.status.toUpperCase()}
-                  </span>
-
-                  {/* Cancel button — only show for pending orders */}
-                  {order.status === 'pending' && (
-                    <button
-                      onClick={() => handleCancel(order._id)}
-                      className="flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-primary-200 dark:border-primary-900 text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition"
-                    >
-                      <X size={11} />
-                      Cancel
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Order Items */}
-              <div className="px-6 py-4 flex flex-col gap-2">
-                {order.items.map((item) => (
-                  <div
-                    key={item.product?._id}
-                    className="flex justify-between text-sm text-gray-600 dark:text-gray-400"
-                  >
-                    <span>
-                      {item.product?.title} × {item.quantity}
-                    </span>
-                    <span>Rs. {item.price * item.quantity}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Order Footer */}
-              <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                <p className="text-xs text-gray-400">
-                  📍 {order.shippingAddress?.city} —{' '}
-                  {order.shippingAddress?.phone}
+         {orders.map((order) => (
+          <div
+            key={order._id}
+            className="bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 overflow-hidden"
+          >
+            {/* Order Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800 gap-2">
+              <div>
+                <p className="text-xs text-gray-400">Order ID</p>
+                <p className="text-sm font-mono text-gray-600 dark:text-gray-300">
+                  {order._id}
                 </p>
-                <div className="flex items-center gap-3">
-                  <p className="font-bold text-primary-500">Rs. {order.totalPrice}</p>
-                  {/* View receipt button */}
-                  <button
-                    onClick={() => navigate(`/order-confirmation/${order._id}`)}
-                    className="text-xs text-gray-400 hover:text-primary-500 transition underline underline-offset-2"
-                  >
-                    View Receipt
-                  </button>
-                </div>
               </div>
-
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[order.status]}`}>
+                  {order.status.toUpperCase()}
+                </span>
+                {order.status === 'pending' && (
+                  <button
+                    onClick={() => handleCancel(order._id)}
+                    className="flex items-center gap-1 text-xs px-3 py-1 rounded-full border border-red-200 dark:border-red-900 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                  >
+                    <X size={11} /> Cancel
+                  </button>
+                )}
+              </div>
             </div>
-          ))}
+
+            {/* Order Items */}
+            <div className="px-6 py-4 flex flex-col gap-2">
+              {order.items.map((item) => (
+                <div key={item.product?._id} className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                  <span>{item.product?.title} × {item.quantity}</span>
+                  <span>Rs. {item.price * item.quantity}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Order Footer */}
+            <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+              <p className="text-xs text-gray-400">
+                📍 {order.shippingAddress?.city} — {order.shippingAddress?.phone}
+              </p>
+              <div className="flex items-center gap-3">
+                <p className="font-bold text-primary-500">Rs. {order.totalPrice}</p>
+                <button
+                  onClick={() => navigate(`/order-confirmation/${order._id}`)}
+                  className="text-xs text-gray-400 hover:text-primary-500 transition underline underline-offset-2"
+                >
+                  View Receipt
+                </button>
+                {/* Toggle timeline */}
+                <button
+                  onClick={() => setExpandedOrder(
+                    expandedOrder === order._id ? null : order._id
+                  )}
+                  className="text-xs text-gray-400 hover:text-primary-500 transition underline underline-offset-2"
+                >
+                  {expandedOrder === order._id ? 'Hide Timeline' : 'Track Order'}
+                </button>
+              </div>
+            </div>
+
+            {/* Timeline — shown when expanded */}
+            {expandedOrder === order._id && (
+              <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/30">
+                <OrderTimeline
+                  status={order.status}
+                  timeline={order.timeline || []}
+                />
+              </div>
+            )}
+
+          </div>
+        ))}
         </div>
       </div>
     </div>

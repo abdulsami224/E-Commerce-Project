@@ -2,6 +2,12 @@ import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
 import Coupon from '../models/Coupon.js';
+import {
+  sendOrderConfirmationEmail,
+  sendOrderShippedEmail,
+  sendOrderDeliveredEmail,
+  sendOrderCancelledEmail
+} from '../config/email.js';
 
 export const placeOrder = async (req, res) => {
   const { shippingAddress, couponCode, discountAmount } = req.body; 
@@ -37,7 +43,14 @@ export const placeOrder = async (req, res) => {
       totalPrice: finalTotal,
       couponCode: couponCode || null,       // ← save coupon used
       discountAmount: discountAmount || 0,   // ← save discount amount
-      shippingAddress
+      shippingAddress,
+      timeline: [
+        {
+          status: 'pending',
+          message: 'Order placed successfully',
+          timestamp: new Date()
+        }
+      ]
     });
 
     // increment coupon usage count
@@ -56,6 +69,22 @@ export const placeOrder = async (req, res) => {
 
     await Cart.findOneAndDelete({ user: req.user._id });
     res.status(201).json(order);
+
+    
+      try {
+        const user = await User.findById(req.user._id);
+        await sendOrderConfirmationEmail(user.email, {
+          ...order.toObject(),
+          userName: user.name,
+          items: cart.items.map(item => ({  
+            product: item.product,
+            quantity: item.quantity,
+            price: item.product.price
+          }))
+        });
+      } catch (emailErr) {
+        console.log('Order confirmation email failed:', emailErr.message);
+      }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -88,17 +117,39 @@ export async function getAllOrders(req, res) {
 
 // Admin - update order status
 export async function updateOrderStatus(req, res) {
-  try {
+   try {
+    const { status } = req.body;
+
+    // message for each status
+    const messages = {
+      pending:    'Order placed successfully',
+      processing: 'Order is being processed',
+      shipped:    'Order has been shipped',
+      delivered:  'Order delivered successfully',
+      cancelled:  'Order has been cancelled',
+    };
+
     const order = await Order.findByIdAndUpdate(
       req.params.id,
-      { status: req.body.status },
+      {
+        status,
+        // ← push new timeline entry
+        $push: {
+          timeline: {
+            status,
+            message: messages[status],
+            timestamp: new Date()
+          }
+        }
+      },
       { new: true }
     );
+
     res.json(order);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 export const getOrderById = async (req, res) => {
   try {
@@ -134,6 +185,11 @@ export const cancelOrder = async (req, res) => {
 
     // update status to cancelled
     order.status = 'cancelled';
+    order.timeline.push({
+      status: 'cancelled',
+      message: 'Order cancelled by customer',
+      timestamp: new Date()
+    });
     await order.save();
 
     // restore stock for each product

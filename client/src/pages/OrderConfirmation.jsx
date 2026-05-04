@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { CheckCircle, Package, MapPin, Phone, ShoppingBag, ChevronLeft, Printer } from 'lucide-react';
 import API from '../api/axios';
+import OrderTimeline from '../components/OrderTimeline';
 
 const statusStyles = {
   pending:    'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400',
@@ -126,6 +127,13 @@ const OrderConfirmation = () => {
                 <span>{order.shippingAddress?.phone}</span>
               </div>
             </div>
+          </div>
+
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+            <OrderTimeline
+              status={order.status}
+              timeline={order.timeline || []}
+            />
           </div>
 
           {/* Order Items */}

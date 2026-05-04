@@ -22,6 +22,13 @@ const orderSchema = new Schema({
   },
   couponCode: { type: String, default: null },
   discountAmount: { type: Number, default: 0 },
+  timeline: [
+    {
+      status: { type: String },
+      message: { type: String },
+      timestamp: { type: Date, default: Date.now }
+    }
+  ],
 }, { timestamps: true });
 
 export default model('Order', orderSchema);

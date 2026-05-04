@@ -116,11 +116,10 @@ export async function getAllOrders(req, res) {
 }
 
 // Admin - update order status
-export async function updateOrderStatus(req, res) {
-   try {
+export const updateOrderStatus = async (req, res) => {
+  try {
     const { status } = req.body;
 
-    // message for each status
     const messages = {
       pending:    'Order placed successfully',
       processing: 'Order is being processed',
@@ -133,7 +132,6 @@ export async function updateOrderStatus(req, res) {
       req.params.id,
       {
         status,
-        // ← push new timeline entry
         $push: {
           timeline: {
             status,
@@ -143,7 +141,24 @@ export async function updateOrderStatus(req, res) {
         }
       },
       { new: true }
-    );
+    ).populate('items.product', 'title price images')
+     .populate('user', 'name email');  // ← populate user for email
+
+    // send email based on status
+    try {
+      const emailData = {
+        ...order.toObject(),
+        userName: order.user.name,
+      };
+
+      if (status === 'shipped') {
+        await sendOrderShippedEmail(order.user.email, emailData);
+      } else if (status === 'delivered') {
+        await sendOrderDeliveredEmail(order.user.email, emailData);
+      }
+    } catch (emailErr) {
+      console.log('Status email failed:', emailErr.message);
+    }
 
     res.json(order);
   } catch (err) {
@@ -169,21 +184,21 @@ export const getOrderById = async (req, res) => {
 
 export const cancelOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id)
+      .populate('items.product', 'title price')
+      .populate('user', 'name email');
 
-    // check order exists
     if (!order)
       return res.status(404).json({ message: 'Order not found' });
 
-    // check order belongs to this user
-    if (order.user.toString() !== req.user._id.toString())
+    if (order.user._id.toString() !== req.user._id.toString())
       return res.status(403).json({ message: 'Not authorized' });
 
-    // only pending orders can be cancelled
     if (order.status !== 'pending')
-      return res.status(400).json({ message: `Cannot cancel order that is already ${order.status}` });
+      return res.status(400).json({
+        message: `Cannot cancel order that is already ${order.status}`
+      });
 
-    // update status to cancelled
     order.status = 'cancelled';
     order.timeline.push({
       status: 'cancelled',
@@ -192,11 +207,21 @@ export const cancelOrder = async (req, res) => {
     });
     await order.save();
 
-    // restore stock for each product
+    // restore stock
     for (const item of order.items) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: item.quantity } // ← add back the quantity
+      await Product.findByIdAndUpdate(item.product._id || item.product, {
+        $inc: { stock: item.quantity }
       });
+    }
+
+    // send cancellation email
+    try {
+      await sendOrderCancelledEmail(order.user.email, {
+        ...order.toObject(),
+        userName: order.user.name,
+      });
+    } catch (emailErr) {
+      console.log('Cancellation email failed:', emailErr.message);
     }
 
     res.json({ message: 'Order cancelled successfully', order });

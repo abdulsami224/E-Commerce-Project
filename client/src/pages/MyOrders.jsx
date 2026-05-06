@@ -36,7 +36,6 @@ const MyOrders = () => {
   };
 
   const handleCancel = (orderId) => {
-    // use toast confirm instead of window.confirm
     toast((t) => (
       <div className="flex flex-col gap-3">
         <p className="font-medium text-sm">Cancel this order?</p>
